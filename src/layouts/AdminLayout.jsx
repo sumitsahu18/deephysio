@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Inbox, Stethoscope, Users, FileText, Building2, Settings, UserCog, LogOut, Menu, X, ExternalLink } from 'lucide-react'
+import { LayoutDashboard, Inbox, Stethoscope, Users, CircleHelp, Settings, UserCog, LogOut, Menu, X, ExternalLink } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useSite } from '../context/SiteContext'
 import { USE_MOCK } from '../api/endpoints'
@@ -8,11 +8,10 @@ import { USE_MOCK } from '../api/endpoints'
 const nav = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, perm: 'dashboard', end: true },
   { to: '/admin/enquiries', label: 'Enquiries', icon: Inbox, perm: 'enquiries' },
-  { to: '/admin/pages', label: 'Page content', icon: FileText, perm: 'pages' },
-  { to: '/admin/services', label: 'Services', icon: Stethoscope, perm: 'services' },
+  { to: '/admin/services', label: 'Treatments', icon: Stethoscope, perm: 'services' },
   { to: '/admin/team', label: 'Team', icon: Users, perm: 'team' },
-  { to: '/admin/clinic', label: 'Clinic details & hours', icon: Building2, perm: 'clinic' },
-  { to: '/admin/site', label: 'Site settings', icon: Settings, perm: 'site' },
+  { to: '/admin/faqs', label: 'FAQs', icon: CircleHelp, perm: 'faqs' },
+  { to: '/admin/settings', label: 'Clinic settings', icon: Settings, perm: 'settings' },
   { to: '/admin/users', label: 'Users & roles', icon: UserCog, perm: 'users' },
 ]
 
@@ -26,7 +25,7 @@ export default function AdminLayout() {
     <aside className="flex h-full w-64 flex-col bg-pine-900 text-sand/80">
       <div className="flex h-16 items-center justify-between px-5">
         <Link to="/admin" className="font-display text-lg font-semibold text-white">
-          {settings.clinicName} <span className="text-[#8fe3f5]">admin</span>
+          {settings.clinicName} <span className="text-clay">admin</span>
         </Link>
         <button className="lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
           <X className="size-5" />
@@ -53,7 +52,7 @@ export default function AdminLayout() {
       </nav>
       <div className="border-t border-white/10 p-4">
         <p className="text-sm font-semibold text-white">{user?.name}</p>
-        <p className="text-xs text-sand/60">{user?.role === 'admin' ? 'Admin' : 'Content Editor'}</p>
+        <p className="text-xs capitalize text-sand/60">{user?.role}</p>
         <button
           onClick={() => {
             logout()
@@ -68,7 +67,7 @@ export default function AdminLayout() {
   )
 
   return (
-    <div className="flex min-h-screen bg-[#f2f6fa]">
+    <div className="flex min-h-screen bg-[#f6f4ef]">
       <div className="sticky top-0 hidden h-screen lg:block">{Sidebar}</div>
 
       {open && (

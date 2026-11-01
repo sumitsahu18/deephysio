@@ -1,45 +1,26 @@
 // Fake backend: jab tak Express/MongoDB nahi bana, data browser ke localStorage mein rehta hai.
-// Admin panel mein kiya change public site par turant dikhta hai.
-import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedEnquiries, seedUsers } from '../data/seed'
+// Isse admin panel mein kiya change public site par turant dikhta hai.
+import { seedSettings, seedServices, seedTeam, seedFaqs, seedEnquiries, seedUsers } from '../data/seed'
 
-const KEY = 'dp_mock_db_v4'
-const wait = (ms = 200) => new Promise((r) => setTimeout(r, ms))
+const KEY = 'dp_mock_db_v1'
+const wait = (ms = 250) => new Promise((r) => setTimeout(r, ms))
 const uid = () => Math.random().toString(36).slice(2, 10)
-
-// Saved data mein naye seed keys bhi aa jaayein (deep merge, saved values jeet-ti hain)
-function merge(seed, saved) {
-  if (Array.isArray(seed) || typeof seed !== 'object' || seed === null) return saved ?? seed
-  const out = { ...seed }
-  Object.keys(saved || {}).forEach((k) => {
-    out[k] = k in seed ? merge(seed[k], saved[k]) : saved[k]
-  })
-  return out
-}
-
-const SEED = () => ({
-  site: seedSite,
-  clinic: seedClinic,
-  pages: seedPages,
-  services: seedServices,
-  team: seedTeam,
-  enquiries: seedEnquiries,
-  users: seedUsers,
-})
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) {
-      const db = JSON.parse(raw)
-      db.site = merge(seedSite, db.site)
-      db.clinic = merge(seedClinic, db.clinic)
-      db.pages = merge(seedPages, db.pages)
-      return db
-    }
+    if (raw) return JSON.parse(raw)
   } catch {
     /* ignore */
   }
-  const fresh = SEED()
+  const fresh = {
+    settings: seedSettings,
+    services: seedServices,
+    team: seedTeam,
+    faqs: seedFaqs,
+    enquiries: seedEnquiries,
+    users: seedUsers,
+  }
   save(fresh)
   return fresh
 }
@@ -48,9 +29,7 @@ function save(db) {
   try {
     localStorage.setItem(KEY, JSON.stringify(db))
   } catch {
-    const err = new Error('Storage is full. Use a smaller image or an image URL.')
-    err.response = { status: 413, data: { message: err.message } }
-    throw err
+    /* ignore */
   }
 }
 
@@ -79,12 +58,13 @@ const publicUser = ({ password, ...u }) => u
 export const mock = {
   async login({ email, password }) {
     await wait()
-    const user = load().users.find((u) => u.email.toLowerCase() === email.toLowerCase())
+    const db = load()
+    const user = db.users.find((u) => u.email.toLowerCase() === email.toLowerCase())
     if (!user || user.password !== password) fail(401, 'Invalid email or password')
     return { token: makeToken(user), user: publicUser(user) }
   },
   async me(token) {
-    await wait(80)
+    await wait(100)
     const p = decodeToken(token)
     if (!p || p.exp < Date.now()) fail(401, 'Session expired')
     const user = load().users.find((u) => u._id === p.id)
@@ -92,20 +72,6 @@ export const mock = {
     return { user: publicUser(user) }
   },
 
-  // Singleton documents: site | clinic | pages
-  async getDoc(name) {
-    await wait(60)
-    return load()[name]
-  },
-  async updateDoc(name, data) {
-    await wait()
-    const db = load()
-    db[name] = { ...db[name], ...data }
-    save(db)
-    return db[name]
-  },
-
-  // Collections: services | team | enquiries | users
   async list(collection) {
     await wait()
     const items = load()[collection]
@@ -123,15 +89,14 @@ export const mock = {
     const item = { _id: uid(), createdAt: new Date().toISOString(), ...data }
     db[collection] = [item, ...db[collection]]
     save(db)
-    return collection === 'users' ? publicUser(item) : item
+    return item
   },
   async update(collection, id, data) {
     await wait()
     const db = load()
     db[collection] = db[collection].map((x) => (x._id === id ? { ...x, ...data } : x))
     save(db)
-    const item = db[collection].find((x) => x._id === id)
-    return collection === 'users' ? publicUser(item) : item
+    return db[collection].find((x) => x._id === id)
   },
   async remove(collection, id) {
     await wait()
@@ -139,6 +104,18 @@ export const mock = {
     db[collection] = db[collection].filter((x) => x._id !== id)
     save(db)
     return { ok: true }
+  },
+
+  async getSettings() {
+    await wait(100)
+    return load().settings
+  },
+  async updateSettings(data) {
+    await wait()
+    const db = load()
+    db.settings = { ...db.settings, ...data }
+    save(db)
+    return db.settings
   },
 
   reset() {

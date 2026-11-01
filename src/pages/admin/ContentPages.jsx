@@ -1,4 +1,4 @@
-import { servicesApi, teamApi, usersApi } from '../../api/endpoints'
+import { servicesApi, teamApi, faqsApi, usersApi } from '../../api/endpoints'
 import { SERVICE_ICONS } from '../../components/Icon'
 import CrudPage from '../../components/CrudPage'
 
@@ -13,33 +13,23 @@ export function AdminServices() {
   }
   return (
     <CrudPage
-      title="Services & Treatments"
-      intro="Describe the care you provide. Avoid promising cures or guaranteed results (UK CAP Code / ASA)."
+      title="Treatments"
+      intro="Describe care, avoid medical claims (UK CAP Code / ASA)."
       api={api}
       sortBy="order"
-      newLabel="Add service"
+      newLabel="Add treatment"
       columns={[
         { key: 'order', label: '#' },
-        {
-          key: 'title',
-          label: 'Service',
-          render: (s) => (
-            <span className="flex items-center gap-3">
-              {s.image && <img src={s.image} alt="" className="size-10 rounded-md object-cover" />}
-              <span className="font-medium">{s.title}</span>
-            </span>
-          ),
-        },
+        { key: 'title', label: 'Title', render: (s) => <span className="font-medium">{s.title}</span> },
         { key: 'summary', label: 'Summary', render: (s) => <span className="text-muted">{s.summary}</span> },
       ]}
       fields={[
         { name: 'title', label: 'Title', required: true },
-        { name: 'slug', label: 'Page URL', help: 'Leave blank to create it from the title, e.g. exercise-therapy' },
-        { name: 'summary', label: 'Short summary (shown on cards)', required: true },
-        { name: 'body', label: 'Full description', type: 'textarea', help: 'Leave an empty line between paragraphs.' },
-        { name: 'helpsWith', label: '“May form part of care for” list (one per line)', type: 'list' },
-        { name: 'image', label: 'Photo', type: 'image' },
-        { name: 'icon', label: 'Icon (shown if there is no photo)', type: 'select', options: Object.keys(SERVICE_ICONS), default: 'HeartPulse' },
+        { name: 'slug', label: 'URL slug', help: 'Leave blank to generate from the title, e.g. manual-therapy' },
+        { name: 'summary', label: 'Short summary', required: true },
+        { name: 'body', label: 'Full description', type: 'textarea' },
+        { name: 'helpsWith', label: 'May be used for (one per line)', type: 'list' },
+        { name: 'icon', label: 'Icon', type: 'select', options: Object.keys(SERVICE_ICONS), default: 'HeartPulse' },
         { name: 'order', label: 'Display order', type: 'number', default: 10 },
       ]}
     />
@@ -50,34 +40,40 @@ export function AdminTeam() {
   return (
     <CrudPage
       title="Team"
-      intro="Named practitioners shown on the About & Team page, with HCPC / CSP badges."
+      intro="Practitioners shown on the About & Team page."
       api={teamApi}
-      sortBy="order"
-      newLabel="Add practitioner"
+      newLabel="Add team member"
       columns={[
-        {
-          key: 'name',
-          label: 'Name',
-          render: (m) => (
-            <span className="flex items-center gap-3">
-              {m.photo && <img src={m.photo} alt="" className="size-10 rounded-full object-cover" />}
-              <span className="font-medium">{m.name}</span>
-            </span>
-          ),
-        },
+        { key: 'name', label: 'Name', render: (m) => <span className="font-medium">{m.name}</span> },
         { key: 'role', label: 'Role' },
         { key: 'hcpc', label: 'HCPC no.' },
-        { key: 'csp', label: 'CSP', render: (m) => (m.csp ? 'Yes' : '—') },
       ]}
       fields={[
         { name: 'name', label: 'Full name', required: true },
-        { name: 'role', label: 'Role / job title', required: true },
+        { name: 'role', label: 'Role / title', required: true },
         { name: 'qualifications', label: 'Qualifications' },
         { name: 'hcpc', label: 'HCPC registration number' },
         { name: 'csp', label: 'Member of the Chartered Society of Physiotherapy (MCSP)', type: 'checkbox' },
-        { name: 'photo', label: 'Photo', type: 'image' },
+        { name: 'photo', label: 'Photo URL', help: 'Image upload backend ke saath add hoga' },
         { name: 'bio', label: 'Short bio', type: 'textarea' },
-        { name: 'order', label: 'Display order', type: 'number', default: 10 },
+      ]}
+    />
+  )
+}
+
+export function AdminFaqs() {
+  return (
+    <CrudPage
+      title="FAQs"
+      api={faqsApi}
+      newLabel="Add question"
+      columns={[
+        { key: 'q', label: 'Question', render: (f) => <span className="font-medium">{f.q}</span> },
+        { key: 'a', label: 'Answer', render: (f) => <span className="text-muted">{f.a}</span> },
+      ]}
+      fields={[
+        { name: 'q', label: 'Question', required: true },
+        { name: 'a', label: 'Answer', type: 'textarea', required: true },
       ]}
     />
   )
@@ -87,7 +83,7 @@ export function AdminUsers() {
   return (
     <CrudPage
       title="Users & roles"
-      intro="Admin: full access. Content Editor: can edit page text, images, services, team, clinic hours and contact details, and view enquiries. Editors cannot manage users, change site settings or delete anything."
+      intro="Admin: full access. Editor: can edit content and view enquiries, but not settings, users or deletions."
       api={usersApi}
       newLabel="Add user"
       columns={[
@@ -97,8 +93,8 @@ export function AdminUsers() {
           key: 'role',
           label: 'Role',
           render: (u) => (
-            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${u.role === 'admin' ? 'bg-pine-700 text-white' : 'bg-pine-50 text-pine-700'}`}>
-              {u.role === 'admin' ? 'Admin' : 'Content Editor'}
+            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${u.role === 'admin' ? 'bg-pine-700 text-white' : 'bg-pine-50 text-pine-700'}`}>
+              {u.role}
             </span>
           ),
         },
@@ -106,7 +102,7 @@ export function AdminUsers() {
       fields={[
         { name: 'name', label: 'Name', required: true },
         { name: 'email', label: 'Email', required: true },
-        { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor', help: 'editor = Content Editor (clinic staff)' },
+        { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor' },
         { name: 'password', label: 'Password', type: 'password', required: true },
       ]}
     />
