@@ -17,7 +17,9 @@ const AdminLayout = lazy(() => import('./layouts/AdminLayout'))
 const Login = lazy(() => import('./pages/admin/Login'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const Enquiries = lazy(() => import('./pages/admin/Enquiries'))
-const Settings = lazy(() => import('./pages/admin/Settings'))
+const PageContent = lazy(() => import('./pages/admin/PageContent'))
+const ClinicDetails = lazy(() => import('./pages/admin/ClinicDetails'))
+const SiteSettings = lazy(() => import('./pages/admin/SiteSettings'))
 const AdminServices = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminServices })))
 const AdminTeam = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminTeam })))
 const AdminFaqs = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminFaqs })))
@@ -29,7 +31,7 @@ export default function App() {
   return (
     <Suspense fallback={<Spinner />}>
       <Routes>
-        {/* Public website */}
+        {/* Public website - PDF 2.2 Site Structure */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -41,15 +43,17 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Admin (JWT protected) */}
+        {/* Admin (JWT protected, role based) */}
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={guard(null, <AdminLayout />)}>
           <Route index element={<Dashboard />} />
           <Route path="enquiries" element={guard('enquiries', <Enquiries />)} />
+          <Route path="pages" element={guard('pages', <PageContent />)} />
           <Route path="services" element={guard('services', <AdminServices />)} />
           <Route path="team" element={guard('team', <AdminTeam />)} />
           <Route path="faqs" element={guard('faqs', <AdminFaqs />)} />
-          <Route path="settings" element={guard('settings', <Settings />)} />
+          <Route path="clinic" element={guard('clinic', <ClinicDetails />)} />
+          <Route path="site" element={guard('site', <SiteSettings />)} />
           <Route path="users" element={guard('users', <AdminUsers />)} />
         </Route>
       </Routes>

@@ -1,217 +1,231 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Phone, ShieldCheck, Award, Languages, Check, Clock, MapPin } from 'lucide-react'
+import { Phone, MapPin, Clock, Info, ArrowRight, ShieldCheck, Languages, CalendarCheck, Check } from 'lucide-react'
 import { useSite } from '../context/SiteContext'
 import { servicesApi } from '../api/endpoints'
 import useFetch from '../hooks/useFetch'
 import Reveal from '../components/Reveal'
-import SectionHeading from '../components/SectionHeading'
 import ServiceCard from '../components/ServiceCard'
 import Spinner from '../components/Spinner'
+import { onImgError } from '../data/images'
+import { todayName, isOpenNow } from '../utils/hours'
 
-const steps = [
-  { n: '01', title: 'Assessment', text: 'We listen to your history and goals, then carry out a thorough physical assessment.' },
-  { n: '02', title: 'Clear plan', text: 'We explain what we found in plain language and agree a treatment plan together.' },
-  { n: '03', title: 'Treatment & progress', text: 'Hands-on care plus exercises you can do at home, reviewed as you improve.' },
-]
+// HOMEPAGE
+// PDF 2.2 (1): "Clean hero section stating conditions treated, practitioner credentials,
+//               and clear calls-to-action (Book / Enquire)."
+// Layout: mingaramed.com.au ka first page - photo hero -> info panel -> band -> services -> feature blocks
+// Saara text Admin > Page content > Home se aata hai (Zero Hardcoding).
 
-function HeroVisual() {
+function Hero({ p, settings }) {
   return (
-    <div className="relative mx-auto aspect-[4/5] w-full max-w-sm sm:max-w-md">
-      <div className="absolute inset-0 rounded-[2.5rem] bg-pine-700" />
-      <div className="absolute inset-x-6 top-6 bottom-24 rounded-[2rem] bg-[radial-gradient(circle_at_30%_20%,#2f7d73,transparent_60%),radial-gradient(circle_at_80%_90%,#e8a87c55,transparent_55%)]" />
-      {/* Abstract spine illustration - photo aane par yahan clinic ki image lagani hai */}
-      <svg viewBox="0 0 200 260" className="absolute inset-x-10 top-10 h-[60%] text-sand/80" aria-hidden="true">
-        {[...Array(9)].map((_, i) => (
-          <rect key={i} x={78 - Math.sin(i / 2) * 10} y={18 + i * 25} width="44" height="16" rx="8" fill="currentColor" opacity={0.35 + i * 0.07} />
-        ))}
-        <path d="M100 10 C 80 80, 120 160, 100 250" stroke="#e8a87c" strokeWidth="2" fill="none" strokeDasharray="4 6" />
-      </svg>
-      <div className="absolute inset-x-5 bottom-5 rounded-2xl bg-white p-4 shadow-xl">
-        <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-full bg-pine-50 text-pine-700">
-            <ShieldCheck className="size-5" />
-          </span>
-          <div>
-            <p className="text-sm font-semibold">HCPC registered</p>
-            <p className="text-xs text-muted">Chartered Society of Physiotherapy members</p>
+    <section className="relative isolate flex min-h-[600px] items-center overflow-hidden bg-pine-900 sm:min-h-[700px] lg:min-h-[calc(100vh-186px)]">
+      {p.heroImage && (
+        <img src={p.heroImage} alt="" onError={onImgError} fetchPriority="high" className="hero-zoom absolute inset-0 -z-20 size-full object-cover object-center" />
+      )}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(51,108,155,0.82)_0%,rgba(80,120,170,0.6)_55%,rgba(110,140,190,0.45)_100%)]" />
+
+      <div className="container-x pt-16 pb-28 text-center text-white sm:pb-36">
+        <p className="anim-fade-down text-2xl font-bold tracking-[0.14em] sm:text-4xl">{p.welcome}</p>
+        <h1 className="anim-zoom-in mt-3 text-6xl leading-none font-bold tracking-tight [animation-delay:200ms] sm:mt-5 sm:text-8xl lg:text-[8rem]">
+          {settings.clinicName}
+        </h1>
+        <p className="anim-fade-up mt-5 text-2xl leading-tight font-bold [animation-delay:400ms] sm:mt-7 sm:text-4xl lg:text-5xl">{p.tagline}</p>
+        <p className="anim-fade-up mx-auto mt-6 max-w-3xl text-base leading-relaxed text-white/90 [animation-delay:550ms] sm:text-lg">{p.intro}</p>
+
+        {/* Conditions treated (PDF) */}
+        {p.conditions?.length > 0 && (
+          <div className="anim-fade-up mt-7 [animation-delay:700ms]">
+            <p className="text-xs font-bold tracking-[0.2em] text-white/75 uppercase">{p.conditionsTitle}</p>
+            <ul className="mx-auto mt-3 flex max-w-4xl flex-wrap justify-center gap-2">
+              {p.conditions.map((c) => (
+                <li key={c} className="rounded-sm border border-white/35 bg-white/10 px-3.5 py-1.5 text-sm backdrop-blur-sm sm:text-[15px]">
+                  {c}
+                </li>
+              ))}
+            </ul>
           </div>
+        )}
+
+        {/* Practitioner credentials (PDF) */}
+        {p.credentials?.length > 0 && (
+          <ul className="anim-fade-up mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium [animation-delay:800ms] sm:text-base">
+            {p.credentials.map((c) => (
+              <li key={c} className="flex items-center gap-2">
+                <ShieldCheck className="size-5 text-[#8fe3f5]" /> {c}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* CTAs: Book / Enquire (PDF) */}
+        <div className="anim-fade-up mt-9 flex flex-col justify-center gap-3 [animation-delay:950ms] sm:flex-row">
+          <Link to="/contact#enquiry" className="btn-accent rounded-sm px-10 py-4 text-lg">
+            <CalendarCheck className="size-5" /> Book / Enquire
+          </Link>
+          <a href={`tel:${settings.phoneHref}`} className="btn rounded-sm border-2 border-white px-10 py-4 text-lg text-white hover:-translate-y-0.5 hover:bg-white hover:text-pine-700">
+            <Phone className="size-5" /> Call {settings.phone}
+          </a>
         </div>
+      </div>
+    </section>
+  )
+}
+
+function InfoPanel({ p, settings }) {
+  const today = todayName()
+  const open = isOpenNow(settings.hours)
+  return (
+    <section className="relative z-10 bg-sand pb-16">
+      <div className="container-x">
+        <Reveal anim="up" className="-mt-14 grid overflow-hidden rounded-md bg-white shadow-[0_25px_60px_-30px_rgba(27,68,103,0.45)] sm:-mt-20 lg:grid-cols-3">
+          {/* Contact */}
+          <div className="space-y-6 bg-pine-700 p-8 text-white sm:p-10">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-semibold tracking-wider text-white/75 uppercase"><Phone className="size-4" /> Telephone</p>
+              <a href={`tel:${settings.phoneHref}`} className="mt-2 block text-3xl font-bold hover:underline">{settings.phone}</a>
+            </div>
+            <div>
+              <p className="flex items-center gap-2 text-sm font-semibold tracking-wider text-white/75 uppercase"><MapPin className="size-4" /> Address</p>
+              <p className="mt-2 text-lg leading-snug">{settings.address}</p>
+            </div>
+            {settings.languages?.length > 0 && (
+              <div>
+                <p className="flex items-center gap-2 text-sm font-semibold tracking-wider text-white/75 uppercase"><Languages className="size-4" /> Languages</p>
+                <p className="mt-2 text-lg">{settings.languages.join(', ')}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Notice */}
+          <div className="flex flex-col justify-between gap-6 border-b border-line p-8 sm:p-10 lg:border-r lg:border-b-0">
+            <div>
+              <h2 className="text-2xl text-pine-900">{p.noticeTitle}</h2>
+              <p className="mt-4 flex gap-3 leading-relaxed text-muted">
+                <Info className="mt-1 size-5 shrink-0 text-clay" /> {p.notice}
+              </p>
+              <ul className="mt-6 space-y-3 text-sm font-medium">
+                {p.credentials?.map((c) => (
+                  <li key={c} className="flex items-center gap-2"><Check className="size-5 text-pine-700" /> {c}</li>
+                ))}
+              </ul>
+            </div>
+            <Link to="/contact#enquiry" className="btn-primary self-start rounded-sm px-8">
+              Book / Enquire <ArrowRight className="size-4" />
+            </Link>
+          </div>
+
+          {/* Opening hours (Today highlight - Mingara jaisa) */}
+          <div className="p-8 sm:p-10">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="flex items-center gap-2 text-xl whitespace-nowrap text-pine-900 sm:text-2xl lg:text-xl xl:text-2xl">
+                <Clock className="size-6 shrink-0 text-pine-700" /> Opening Hours
+              </h2>
+              <span className={`shrink-0 rounded-sm px-2.5 py-1 text-xs font-bold whitespace-nowrap ${open ? 'bg-emerald-100 text-emerald-800' : 'bg-sand text-muted'}`}>
+                {open ? 'OPEN NOW' : 'CLOSED NOW'}
+              </span>
+            </div>
+            <ul className="mt-5 divide-y divide-line text-[15px]">
+              {settings.hours?.map((h) => {
+                const isToday = h.day.toLowerCase() === today.toLowerCase()
+                return (
+                  <li key={h.day} className={`flex justify-between py-2.5 ${isToday ? 'font-bold text-pine-700' : ''}`}>
+                    <span>{h.day}{isToday && ' (Today)'}</span>
+                    <span className={h.time === 'Closed' && !isToday ? 'text-muted' : ''}>{h.time}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+function Band({ p }) {
+  return (
+    <section className="relative isolate overflow-hidden bg-pine-900">
+      {p.bandImage && <img src={p.bandImage} alt="" onError={onImgError} loading="lazy" className="absolute inset-0 -z-20 size-full object-cover" />}
+      <div className="absolute inset-0 -z-10 bg-pine-900/80" />
+      <div className="container-x py-20 text-center text-white sm:py-24">
+        <Reveal anim="zoom">
+          <h2 className="text-3xl sm:text-5xl">{p.bandTitle}</h2>
+        </Reveal>
+        <Reveal anim="up" delay={150}>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/85">{p.bandText}</p>
+          <Link to="/contact#enquiry" className="btn-accent mt-9 rounded-sm px-12 py-4 text-lg">
+            Send an Enquiry
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+function Services({ p }) {
+  const { data: services, loading } = useFetch(servicesApi.list)
+  const sorted = [...(services || [])].sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
+  return (
+    <section className="bg-white py-20 sm:py-24">
+      <div className="container-x">
+        <Reveal className="text-center">
+          <p className="text-sm font-bold tracking-[0.2em] text-clay uppercase">{p.servicesEyebrow}</p>
+          <h2 className="mt-3 text-4xl text-pine-900 sm:text-5xl">{p.servicesTitle}</h2>
+          <span className="mx-auto mt-5 block h-1 w-16 rounded-full bg-clay" />
+        </Reveal>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div className="mt-16 grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {sorted.slice(0, 4).map((s, i) => (
+              <ServiceCard key={s._id} service={s} index={i} delay={i * 120} />
+            ))}
+          </div>
+        )}
+        <Reveal className="mt-12 text-center">
+          <Link to="/services" className="btn-primary rounded-sm px-10 py-4 text-base">
+            View All Services <ArrowRight className="size-4" />
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+function FeatureBlock({ f, to, reverse }) {
+  if (!f) return null
+  return (
+    <div className={`grid items-stretch lg:grid-cols-2 ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`}>
+      <div className="group relative min-h-72 overflow-hidden bg-pine-700 lg:min-h-[480px]">
+        {f.image && (
+          <img src={f.image} alt="" onError={onImgError} loading="lazy" className="absolute inset-0 size-full object-cover transition duration-[1.2s] group-hover:scale-105" />
+        )}
+      </div>
+      <div className="flex flex-col justify-center bg-sand px-6 py-14 sm:px-12 lg:px-16">
+        <Reveal anim={reverse ? 'left' : 'right'}>
+          <p className="text-sm font-bold tracking-[0.2em] text-clay uppercase">{f.eyebrow}</p>
+          <h2 className="mt-3 text-4xl text-pine-900">{f.title}</h2>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">{f.text}</p>
+          <Link to={to} className="btn-primary mt-8 rounded-sm px-8 py-3.5">
+            {f.cta} <ArrowRight className="size-4" />
+          </Link>
+        </Reveal>
       </div>
     </div>
   )
 }
 
 export default function Home() {
-  const { settings } = useSite()
-  const { data: services, loading } = useFetch(servicesApi.list)
-
+  const { settings, pages } = useSite()
+  const p = pages.home
   return (
     <>
-      {/* HERO */}
-      <section className="overflow-hidden">
-        <div className="container-x grid items-center gap-12 pt-8 pb-16 sm:pt-12 lg:grid-cols-2 lg:pb-24">
-          <div>
-            <Reveal>
-              <p className="eyebrow">Physiotherapy clinic · Smethwick, Birmingham</p>
-              <h1 className="mt-4 text-4xl font-semibold leading-[1.08] sm:text-5xl lg:text-[3.4rem]">
-                {settings.heroTitle}
-              </h1>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">{settings.heroSubtitle}</p>
-            </Reveal>
-
-            <Reveal delay={120} className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/contact" className="btn-primary px-7 py-3.5 text-base">
-                Book an assessment <ArrowRight className="size-4" />
-              </Link>
-              <a href={`tel:${settings.phoneHref}`} className="btn-outline px-7 py-3.5 text-base">
-                <Phone className="size-4" /> {settings.phone}
-              </a>
-            </Reveal>
-
-            <Reveal delay={220} as="ul" className="mt-8 flex flex-wrap gap-2">
-              {settings.conditions?.map((c) => (
-                <li key={c} className="rounded-full border border-line bg-white px-3.5 py-1.5 text-sm text-ink/80">
-                  {c}
-                </li>
-              ))}
-            </Reveal>
-          </div>
-
-          <Reveal delay={150}>
-            <HeroVisual />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* CREDENTIALS STRIP */}
-      <section className="border-y border-line bg-sand">
-        <div className="container-x grid gap-6 py-8 sm:grid-cols-3">
-          {[
-            { icon: ShieldCheck, title: 'HCPC registered', text: 'All practitioners are registered with the Health & Care Professions Council.' },
-            { icon: Award, title: 'CSP members', text: 'Members of the Chartered Society of Physiotherapy.' },
-            { icon: Languages, title: 'We speak your language', text: settings.languages?.join(', ') },
-          ].map(({ icon: I, title, text }, i) => (
-            <Reveal key={title} delay={i * 80} className="flex gap-3">
-              <I className="mt-0.5 size-6 shrink-0 text-pine-700" strokeWidth={1.75} />
-              <div>
-                <p className="font-semibold">{title}</p>
-                <p className="text-sm text-muted">{text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <section className="py-20">
-        <div className="container-x">
-          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <SectionHeading
-              eyebrow="Treatments"
-              title="Care that fits your body and your goals"
-              intro="Every plan starts with a proper assessment. These are some of the approaches we may use."
-            />
-            <Link to="/services" className="btn-outline shrink-0">
-              All treatments <ArrowRight className="size-4" />
-            </Link>
-          </div>
-          {loading ? (
-            <Spinner />
-          ) : (
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {services?.slice(0, 6).map((s, i) => (
-                <ServiceCard key={s._id} service={s} delay={i * 60} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* HOW WE WORK */}
-      <section className="bg-pine-900 py-20 text-sand">
-        <div className="container-x">
-          <Reveal className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-clay">How we work</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
-              Clear communication at every step
-            </h2>
-          </Reveal>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {steps.map((s, i) => (
-              <Reveal key={s.n} delay={i * 100} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="font-display text-4xl text-clay">{s.n}</p>
-                <h3 className="mt-4 text-xl font-semibold text-white">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-sand/70">{s.text}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PRICING + HOURS */}
-      <section className="py-20">
-        <div className="container-x grid gap-8 lg:grid-cols-5">
-          <div className="lg:col-span-3">
-            <SectionHeading eyebrow="Fees" title="Simple, transparent pricing" />
-            <Reveal className="card mt-8 divide-y divide-line">
-              {settings.pricing?.map((p) => (
-                <div key={p.name} className="flex items-center justify-between gap-4 p-5">
-                  <div className="flex gap-3">
-                    <Check className="mt-0.5 size-5 shrink-0 text-pine-500" />
-                    <div>
-                      <p className="font-medium">{p.name}</p>
-                      <p className="text-sm text-muted">{p.duration}</p>
-                    </div>
-                  </div>
-                  <p className="font-display text-2xl font-semibold text-pine-700">{p.price}</p>
-                </div>
-              ))}
-            </Reveal>
-          </div>
-
-          <Reveal delay={120} className="card self-start bg-sand p-6 lg:col-span-2">
-            <div className="flex items-center gap-2">
-              <Clock className="size-5 text-pine-700" />
-              <h3 className="text-xl font-semibold">Opening hours</h3>
-            </div>
-            <ul className="mt-5 space-y-2 text-sm">
-              {settings.hours?.map((h) => (
-                <li key={h.day} className="flex justify-between border-b border-line/70 pb-2 last:border-0">
-                  <span>{h.day}</span>
-                  <span className={h.time === 'Closed' ? 'text-muted' : 'font-medium'}>{h.time}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 flex gap-2 text-sm text-muted">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-pine-700" /> {settings.address}
-            </p>
-            <Link to="/contact" className="btn-primary mt-6 w-full">
-              Get directions & enquire
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="pb-20">
-        <Reveal className="container-x">
-          <div className="relative overflow-hidden rounded-[2rem] bg-clay px-6 py-12 text-center sm:px-12">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold text-pine-900 sm:text-4xl">
-              Ready to take the first step?
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-pine-900/80">
-              Send us a quick enquiry and we will get back to you to arrange a time that suits you.
-            </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link to="/contact" className="btn bg-pine-900 text-white hover:bg-pine-700">
-                Make an enquiry
-              </Link>
-              <a href={`tel:${settings.phoneHref}`} className="btn-light">
-                <Phone className="size-4" /> Call {settings.phone}
-              </a>
-            </div>
-          </div>
-        </Reveal>
+      <Hero p={p} settings={settings} />
+      <InfoPanel p={p} settings={settings} />
+      <Band p={p} />
+      <Services p={p} />
+      <section>
+        <FeatureBlock f={p.feature1} to="/about" />
+        <FeatureBlock f={p.feature2} to="/contact#enquiry" reverse />
       </section>
     </>
   )

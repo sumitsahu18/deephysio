@@ -33,14 +33,14 @@ export default function TopBar() {
               target="_blank"
               rel="noreferrer"
               aria-label={label}
-              className="hidden size-10 place-items-center rounded-sm bg-white text-pine-700 transition duration-300 hover:-translate-y-0.5 hover:bg-clay hover:text-white sm:grid"
+              className="hidden size-10 place-items-center rounded-sm bg-white text-pine-700 transition-colors duration-300 hover:bg-clay hover:text-white sm:grid"
             >
               <Icon className="size-5" />
             </a>
           ))}
           <Link
             to="/contact#enquiry"
-            className="ml-1 flex items-center gap-2 rounded-sm bg-clay px-4 py-2.5 text-sm font-medium text-white transition duration-300 hover:-translate-y-0.5 hover:bg-clay-600 hover:shadow-lg sm:px-7 sm:text-[17px]"
+            className="ml-1 flex shrink-0 items-center gap-2 whitespace-nowrap rounded-sm bg-clay px-4 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:bg-clay-600 sm:px-7 sm:text-[17px]"
           >
             <CalendarCheck className="size-4" /> Book / Enquire
           </Link>

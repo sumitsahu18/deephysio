@@ -1,26 +1,34 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { settingsApi } from '../api/endpoints'
-import { seedSettings } from '../data/seed'
+import { siteApi, clinicApi, pagesApi } from '../api/endpoints'
+import { seedSite, seedClinic, seedPages } from '../data/seed'
 
-// Clinic ki settings (phone, email, hours, address) API se aati hain,
-// isliye koi bhi detail component mein hardcode nahi hai.
-const SiteContext = createContext({ settings: seedSettings, refresh: () => {} })
+// Poori public site ka content API se aata hai - koi text component mein hardcode nahi.
+//   settings = site (admin) + clinic (reception) details, ek object mein
+//   pages    = har page ka headline / paragraph / image
+const SiteContext = createContext(null)
 
 export function SiteProvider({ children }) {
-  const [settings, setSettings] = useState(seedSettings)
+  const [site, setSite] = useState(seedSite)
+  const [clinic, setClinic] = useState(seedClinic)
+  const [pages, setPages] = useState(seedPages)
 
   const refresh = useCallback(() => {
-    settingsApi
-      .get()
-      .then(setSettings)
-      .catch(() => {})
+    siteApi.get().then(setSite).catch(() => {})
+    clinicApi.get().then(setClinic).catch(() => {})
+    pagesApi.get().then(setPages).catch(() => {})
   }, [])
 
   useEffect(() => {
     refresh()
   }, [refresh])
 
-  return <SiteContext.Provider value={{ settings, setSettings, refresh }}>{children}</SiteContext.Provider>
+  const settings = { ...site, ...clinic }
+
+  return (
+    <SiteContext.Provider value={{ settings, site, clinic, pages, setSite, setClinic, setPages, refresh }}>
+      {children}
+    </SiteContext.Provider>
+  )
 }
 
 export const useSite = () => useContext(SiteContext)

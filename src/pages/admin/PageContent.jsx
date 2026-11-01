@@ -135,6 +135,27 @@ const SCHEMA = {
       },
     ],
   },
+  faq: {
+    label: 'FAQ',
+    url: '/faq',
+    groups: [
+      {
+        title: 'Page header',
+        fields: [
+          { key: 'title', label: 'Page title', wide: false },
+          { key: 'intro', label: 'Intro', type: 'textarea', rows: 2 },
+          { key: 'headerImage', label: 'Header photo', type: 'image' },
+        ],
+      },
+      {
+        title: 'Bottom box',
+        fields: [
+          { key: 'ctaTitle', label: 'Heading', wide: false },
+          { key: 'ctaText', label: 'Text', type: 'textarea', rows: 2 },
+        ],
+      },
+    ],
+  },
   privacy: {
     label: 'Privacy Policy',
     url: '/privacy',

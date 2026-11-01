@@ -1,24 +1,19 @@
 import { useSite } from '../context/SiteContext'
 import PageHeader from '../components/PageHeader'
+import Reveal from '../components/Reveal'
 
-// Placeholder - client se asli privacy policy text lena (UK GDPR compliant)
+// Enquiry form ke consent checkbox ke liye zaroori (UK GDPR). Text Admin > Page content se.
 export default function Privacy() {
-  const { settings } = useSite()
+  const { pages, settings } = useSite()
+  const p = pages.privacy
   return (
     <>
-      <PageHeader eyebrow="Legal" title="Privacy policy" />
-      <section className="py-16">
-        <div className="container-x max-w-3xl space-y-4 leading-relaxed text-ink/85">
-          <p>
-            This is placeholder text. {settings.legalName} should supply its own privacy policy covering how enquiry
-            details are collected, stored, used and deleted under UK GDPR.
-          </p>
-          <p>
-            Our enquiry form only collects your name, contact details, preferred contact time and message, which are used
-            solely to respond to your enquiry.
-          </p>
-          <p>Contact: {settings.email}</p>
-        </div>
+      <PageHeader title={p.title} image={pages.about.headerImage} />
+      <section className="bg-white py-16">
+        <Reveal className="container-x max-w-3xl space-y-4 text-lg leading-relaxed text-ink/85">
+          {p.body?.split('\n').filter(Boolean).map((para, i) => <p key={i}>{para}</p>)}
+          <p>Contact: <a href={`mailto:${settings.email}`} className="text-pine-700 underline">{settings.email}</a></p>
+        </Reveal>
       </section>
     </>
   )

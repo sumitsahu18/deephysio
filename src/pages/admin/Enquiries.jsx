@@ -84,7 +84,7 @@ export default function Enquiries() {
                     )}
                   </div>
                 </div>
-                <p className="mt-4 whitespace-pre-line rounded-xl bg-[#f6f4ef] p-4 text-sm">{e.message}</p>
+                <p className="mt-4 whitespace-pre-line rounded-xl bg-[#f2f6fa] p-4 text-sm">{e.message}</p>
               </div>
             )
           })}

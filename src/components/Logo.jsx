@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 // Dotted-ring logo (Mingara jaisa style, lekin DeePhysio ka apna). Client ka asli logo aaye to
 // yahan <img src="/logo.png" /> laga dena.
-function Mark({ className = '' }) {
+function Mark({ className = '', light = false }) {
   const dots = Array.from({ length: 22 }, (_, i) => {
     const a = (Math.PI * 2 * i) / 26 + Math.PI * 0.62
     const r = 26
@@ -13,20 +13,20 @@ function Mark({ className = '' }) {
       {dots.map((d, i) => (
         <circle key={i} cx={d.x} cy={d.y} r={d.s} fill={i % 3 ? '#336c9b' : '#1fa3c6'} opacity={d.o} />
       ))}
-      <path d="M24 20v24h6a12 12 0 0 0 0-24z" fill="none" stroke="#1b4467" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M24 20v24h6a12 12 0 0 0 0-24z" fill="none" stroke={light ? '#ffffff' : '#1b4467'} strokeWidth="4" strokeLinejoin="round" />
     </svg>
   )
 }
 
-export default function Logo({ light = false }) {
+export default function Logo({ light = false, to = '/', small = false }) {
   return (
-    <Link to="/" className="flex items-center gap-2" aria-label="DeePhysio home">
-      <Mark className="size-14 shrink-0 sm:size-16" />
-      <span className="leading-none">
-        <span className={`block text-2xl tracking-tight sm:text-[1.75rem] ${light ? 'text-white' : 'text-ink'}`}>
+    <Link to={to} className="flex min-w-0 items-center gap-2" aria-label="DeePhysio home">
+      <Mark light={light} className={`shrink-0 ${small ? 'size-11' : 'size-14 sm:size-16'}`} />
+      <span className="leading-none whitespace-nowrap">
+        <span className={`block tracking-tight ${small ? 'text-xl' : 'text-2xl sm:text-[1.75rem]'} ${light ? 'text-white' : 'text-ink'}`}>
           dee<span className={`font-bold ${light ? 'text-white' : 'text-pine-700'}`}>physio</span>
         </span>
-        <span className={`mt-1 block text-[9px] font-medium tracking-[0.22em] uppercase sm:text-[10px] ${light ? 'text-white/70' : 'text-muted'}`}>
+        <span className={`mt-1 block font-medium uppercase ${small ? 'text-[8px] tracking-[0.18em]' : 'text-[9px] tracking-[0.22em] sm:text-[10px]'} ${light ? 'text-white/70' : 'text-muted'}`}>
           Physiotherapy clinic
         </span>
       </span>

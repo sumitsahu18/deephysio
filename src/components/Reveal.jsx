@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 
-// Scroll karne par halka fade-up animation (lightweight, koi library nahi)
-export default function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest }) {
+// Scroll karne par element animate hoke aata hai (koi library nahi, IntersectionObserver)
+// anim: 'up' (default) | 'down' | 'left' | 'right' | 'zoom' | 'fade'
+export default function Reveal({ as: Tag = 'div', anim = 'up', delay = 0, className = '', children, ...rest }) {
   const ref = useRef(null)
 
   useEffect(() => {
@@ -14,14 +15,14 @@ export default function Reveal({ as: Tag = 'div', delay = 0, className = '', chi
           io.disconnect()
         }
       },
-      { threshold: 0.12 },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
     )
     io.observe(el)
     return () => io.disconnect()
   }, [])
 
   return (
-    <Tag ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }} {...rest}>
+    <Tag ref={ref} data-anim={anim} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }} {...rest}>
       {children}
     </Tag>
   )

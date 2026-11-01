@@ -4,9 +4,10 @@ import { getErrorMessage } from '../api/endpoints'
 import { useAuth } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
 import Spinner from './Spinner'
+import MediaInput from './MediaInput'
 
 // Reusable list + add/edit modal. Har admin page sirf "fields" config deta hai.
-// field types: text | textarea | number | select | checkbox | list (ek line = ek item) | password
+// field types: text | textarea | number | select | checkbox | list (ek line = ek item) | password | image
 function toForm(fields, item = {}) {
   const f = {}
   fields.forEach((fd) => {
@@ -100,7 +101,7 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
       ) : (
         <div className="card mt-6 overflow-x-auto">
           <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-line bg-[#f6f4ef] text-xs uppercase tracking-wide text-muted">
+            <thead className="border-b border-line bg-[#f2f6fa] text-xs uppercase tracking-wide text-muted">
               <tr>
                 {columns.map((c) => (
                   <th key={c.key} className="px-5 py-3 font-semibold">{c.label}</th>
@@ -110,7 +111,7 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
             </thead>
             <tbody className="divide-y divide-line">
               {list.map((item) => (
-                <tr key={item._id} className="hover:bg-[#fbfaf7]">
+                <tr key={item._id} className="hover:bg-[#f7fafc]">
                   {columns.map((c) => (
                     <td key={c.key} className="px-5 py-4 align-top">
                       {c.render ? c.render(item) : item[c.key]}
@@ -164,6 +165,8 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
                       </label>
                       {f.type === 'textarea' || f.type === 'list' ? (
                         <textarea id={f.name} rows={f.type === 'list' ? 4 : 5} className="input" value={form[f.name]} onChange={(e) => setForm({ ...form, [f.name]: e.target.value })} />
+                      ) : f.type === 'image' ? (
+                        <MediaInput id={f.name} value={form[f.name]} onChange={(v) => setForm({ ...form, [f.name]: v })} />
                       ) : f.type === 'select' ? (
                         <select id={f.name} className="input" value={form[f.name]} onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}>
                           {f.options.map((o) => (
