@@ -8,12 +8,11 @@ import Reveal from '../components/Reveal'
 import { todayName } from '../utils/hours'
 
 // CONTACT & BOOKING ENQUIRY
-// PDF 2.2 (4): "Integrated enquiry form, click-to-call mobile button, practice opening hours,
-//               and embedded Google Maps."
+// PDF 2.2 (4): enquiry form, click-to-call, opening hours, embedded Google Map.
 // PDF 2.4 Data Minimisation: SIRF Name, Email/Phone, Preferred Contact Time, Message.
-//   Medical dropdown / pain-scale slider NAHI (special-category health data ban jata hai).
 // PDF 2.4 Enquiry Delivery: backend clinic email par authenticated SMTP se bhejega.
 const empty = { name: '', contact: '', preferredTime: 'Any time', message: '', consent: false, website: '' }
+const err = 'mt-1 text-sm text-coral-300'
 
 export default function Contact() {
   const { settings, pages } = useSite()
@@ -50,8 +49,8 @@ export default function Contact() {
       await enquiriesApi.create({ ...payload, status: 'new' })
       setStatus('sent')
       setForm(empty)
-    } catch (err) {
-      setServerError(getErrorMessage(err))
+    } catch (error) {
+      setServerError(getErrorMessage(error))
       setStatus('error')
     }
   }
@@ -60,117 +59,116 @@ export default function Contact() {
     <>
       <PageHeader title={p.title} intro={p.intro} image={p.headerImage} />
 
-      <section className="bg-sand py-20">
-        <div className="container-x grid gap-8 lg:grid-cols-5">
-          {/* ENQUIRY FORM */}
-          <Reveal anim="left" id="enquiry" className="scroll-mt-28 rounded-md bg-white p-6 shadow-[0_20px_50px_-30px_rgba(27,68,103,0.45)] sm:p-10 lg:col-span-3">
-            {status === 'sent' ? (
-              <div className="py-12 text-center" role="status">
-                <CheckCircle2 className="anim-zoom-in mx-auto size-16 text-emerald-600" />
-                <h2 className="mt-5 text-3xl text-pine-900">{p.successTitle}</h2>
-                <p className="mt-3 text-lg text-muted">{p.successText}</p>
-                <button className="btn-outline mt-8 rounded-sm" onClick={() => setStatus('idle')}>Send another enquiry</button>
+      <section className="shell mt-10 grid gap-6 lg:grid-cols-5">
+        {/* ENQUIRY FORM */}
+        <Reveal anim="left" id="enquiry" className="glass relative isolate scroll-mt-28 overflow-hidden rounded-3xl p-6 sm:p-9 lg:col-span-3">
+          <div className="inner-glow opacity-50" />
+          {status === 'sent' ? (
+            <div className="py-12 text-center" role="status">
+              <CheckCircle2 className="anim-zoom-in mx-auto size-16 text-aqua-300" />
+              <h2 className="mt-5 font-glass text-3xl font-semibold">{p.successTitle}</h2>
+              <p className="mt-3 text-lg text-white/75">{p.successText}</p>
+              <button className="btn-glass mt-8" onClick={() => setStatus('idle')}>Send another enquiry</button>
+            </div>
+          ) : (
+            <form onSubmit={onSubmit} noValidate className="space-y-5">
+              <div>
+                <p className="eyebrow-glass">Book an appointment</p>
+                <h2 className="mt-2 font-glass text-3xl font-semibold">{p.formTitle}</h2>
               </div>
-            ) : (
-              <form onSubmit={onSubmit} noValidate className="space-y-5">
+
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <h2 className="text-3xl text-pine-900">{p.formTitle}</h2>
-                  <span className="mt-4 block h-1 w-14 rounded-full bg-clay" />
+                  <label htmlFor="name" className="label-glass">Name <span className="text-coral-300">*</span></label>
+                  <input id="name" className="input-glass" value={form.name} onChange={set('name')} autoComplete="name" aria-invalid={!!errors.name} />
+                  {errors.name && <p className={err}>{errors.name}</p>}
                 </div>
-
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="name" className="label">Name <span className="text-red-700">*</span></label>
-                    <input id="name" className="input rounded-sm" value={form.name} onChange={set('name')} autoComplete="name" aria-invalid={!!errors.name} />
-                    {errors.name && <p className="mt-1 text-sm text-red-700">{errors.name}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="contact" className="label">Email or phone <span className="text-red-700">*</span></label>
-                    <input id="contact" className="input rounded-sm" value={form.contact} onChange={set('contact')} aria-invalid={!!errors.contact} />
-                    {errors.contact && <p className="mt-1 text-sm text-red-700">{errors.contact}</p>}
-                  </div>
-                </div>
-
                 <div>
-                  <label htmlFor="preferredTime" className="label">Preferred contact time</label>
-                  <select id="preferredTime" className="input rounded-sm" value={form.preferredTime} onChange={set('preferredTime')}>
-                    <option>Any time</option>
-                    <option>Morning</option>
-                    <option>Afternoon</option>
-                    <option>Evening</option>
-                  </select>
+                  <label htmlFor="contact" className="label-glass">Email or phone <span className="text-coral-300">*</span></label>
+                  <input id="contact" className="input-glass" value={form.contact} onChange={set('contact')} aria-invalid={!!errors.contact} />
+                  {errors.contact && <p className={err}>{errors.contact}</p>}
                 </div>
+              </div>
 
-                <div>
-                  <label htmlFor="message" className="label">Message <span className="text-red-700">*</span></label>
-                  <textarea id="message" rows={5} className="input resize-y rounded-sm" value={form.message} onChange={set('message')} placeholder={p.messageHint} aria-invalid={!!errors.message} />
-                  {errors.message && <p className="mt-1 text-sm text-red-700">{errors.message}</p>}
-                </div>
+              <div>
+                <label htmlFor="preferredTime" className="label-glass">Preferred contact time</label>
+                <select id="preferredTime" className="input-glass" value={form.preferredTime} onChange={set('preferredTime')}>
+                  <option>Any time</option>
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                </select>
+              </div>
 
-                {/* Honeypot (spam se bachne ke liye, user ko dikhta nahi) */}
-                <input type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} className="hidden" aria-hidden="true" />
+              <div>
+                <label htmlFor="message" className="label-glass">Message <span className="text-coral-300">*</span></label>
+                <textarea id="message" rows={5} className="input-glass resize-y" value={form.message} onChange={set('message')} placeholder={p.messageHint} aria-invalid={!!errors.message} />
+                {errors.message && <p className={err}>{errors.message}</p>}
+              </div>
 
-                <label className="flex gap-3 text-sm text-ink/80">
-                  <input type="checkbox" checked={form.consent} onChange={set('consent')} className="mt-0.5 size-4 accent-pine-700" />
-                  <span>
-                    I agree to {settings.clinicName} using these details to respond to my enquiry, as described in the{' '}
-                    <Link to="/privacy" className="font-medium text-pine-700 underline">privacy policy</Link>.
-                  </span>
-                </label>
-                {errors.consent && <p className="-mt-3 text-sm text-red-700">{errors.consent}</p>}
+              {/* Honeypot (spam se bachne ke liye, user ko dikhta nahi) */}
+              <input type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} className="hidden" aria-hidden="true" />
 
-                {serverError && <p className="rounded-sm bg-red-50 p-3 text-sm text-red-700">{serverError}</p>}
+              <label className="flex gap-3 text-sm text-white/80">
+                <input type="checkbox" checked={form.consent} onChange={set('consent')} className="mt-0.5 size-4 shrink-0 accent-teal-400" />
+                <span>
+                  I agree to {settings.clinicName} using these details to respond to my enquiry, as described in the{' '}
+                  <Link to="/privacy" className="font-medium text-aqua-300 underline">privacy policy</Link>.
+                </span>
+              </label>
+              {errors.consent && <p className={`-mt-3 ${err}`}>{errors.consent}</p>}
 
-                <button type="submit" className="btn-primary w-full rounded-sm py-4 text-base sm:w-auto sm:px-12" disabled={status === 'sending'}>
-                  {status === 'sending' ? <LoaderCircle className="size-5 animate-spin" /> : <Send className="size-5" />}
-                  {status === 'sending' ? 'Sending…' : 'Send Enquiry'}
-                </button>
-              </form>
-            )}
+              {serverError && <p className="rounded-xl bg-coral/20 p-3 text-sm text-white">{serverError}</p>}
+
+              <button type="submit" className="btn-white w-full py-4 text-base sm:w-auto sm:px-12" disabled={status === 'sending'}>
+                {status === 'sending' ? <LoaderCircle className="size-5 animate-spin" /> : <Send className="size-5" />}
+                {status === 'sending' ? 'Sending…' : 'Send Enquiry'}
+              </button>
+            </form>
+          )}
+        </Reveal>
+
+        {/* CLICK-TO-CALL + DETAILS + HOURS */}
+        <div className="space-y-6 lg:col-span-2">
+          <Reveal anim="right" className="grad-aurora space-y-5 rounded-3xl border border-white/25 p-7">
+            <a href={`tel:${settings.phoneHref}`} className="flex items-center gap-4 rounded-2xl border border-white/30 bg-white/15 p-4 transition-colors hover:bg-white/25">
+              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-deep"><Phone className="size-5" /></span>
+              <span>
+                <span className="block text-sm text-white/85">Tap to call</span>
+                <span className="block font-glass text-2xl font-semibold">{settings.phone}</span>
+              </span>
+            </a>
+            <a href={`mailto:${settings.email}`} className="flex items-center gap-3 hover:underline">
+              <Mail className="size-5 shrink-0" /> <span className="break-all">{settings.email}</span>
+            </a>
+            <p className="flex gap-3">
+              <MapPin className="size-5 shrink-0" /> {settings.address}
+            </p>
           </Reveal>
 
-          {/* CLICK-TO-CALL + DETAILS + HOURS */}
-          <div className="space-y-6 lg:col-span-2">
-            <Reveal anim="right" className="space-y-5 rounded-md bg-pine-700 p-7 text-white">
-              <a href={`tel:${settings.phoneHref}`} className="flex items-center gap-4 rounded-sm bg-clay p-5 transition duration-300 hover:-translate-y-0.5 hover:bg-clay-600 hover:shadow-lg">
-                <span className="grid size-12 place-items-center rounded-full bg-white/20"><Phone className="size-6" /></span>
-                <span>
-                  <span className="block text-sm text-white/85">Tap to call</span>
-                  <span className="block text-2xl font-bold">{settings.phone}</span>
-                </span>
-              </a>
-              <a href={`mailto:${settings.email}`} className="flex items-center gap-3 hover:underline">
-                <Mail className="size-5 shrink-0 text-[#8fe3f5]" /> <span className="break-all">{settings.email}</span>
-              </a>
-              <p className="flex gap-3">
-                <MapPin className="size-5 shrink-0 text-[#8fe3f5]" /> {settings.address}
-              </p>
-            </Reveal>
-
-            <Reveal anim="right" delay={120} className="rounded-md bg-white p-7 shadow-[0_20px_50px_-30px_rgba(27,68,103,0.45)]">
-              <h3 className="flex items-center gap-2 text-2xl text-pine-900"><Clock className="size-6 text-pine-700" /> Opening Hours</h3>
-              <ul className="mt-5 divide-y divide-line text-[15px]">
-                {settings.hours?.map((h) => {
-                  const isToday = h.day.toLowerCase() === today.toLowerCase()
-                  return (
-                    <li key={h.day} className={`flex justify-between py-2.5 ${isToday ? 'font-bold text-pine-700' : ''}`}>
-                      <span>{h.day}{isToday && ' (Today)'}</span>
-                      <span className={h.time === 'Closed' && !isToday ? 'text-muted' : ''}>{h.time}</span>
-                    </li>
-                  )
-                })}
-              </ul>
-            </Reveal>
-          </div>
+          <Reveal anim="right" delay={120} className="glass rounded-3xl p-7">
+            <h3 className="flex items-center gap-2 font-glass text-xl font-semibold"><Clock className="size-5 text-aqua-300" /> Opening Hours</h3>
+            <ul className="mt-4 divide-y divide-white/10 text-[15px]">
+              {settings.hours?.map((h) => {
+                const isToday = h.day.toLowerCase() === today.toLowerCase()
+                return (
+                  <li key={h.day} className={`flex justify-between py-2.5 ${isToday ? 'font-semibold text-aqua-300' : 'text-white/75'}`}>
+                    <span>{h.day}{isToday && ' (Today)'}</span>
+                    <span className={h.time === 'Closed' && !isToday ? 'text-white/45' : ''}>{h.time}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          </Reveal>
         </div>
-
-        {/* EMBEDDED GOOGLE MAP */}
-        <Reveal anim="zoom" className="container-x mt-10">
-          <div className="overflow-hidden rounded-md border border-line bg-white shadow-sm">
-            <iframe title={`Map showing ${settings.clinicName}`} src={settings.mapEmbedUrl} className="h-80 w-full sm:h-[420px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </Reveal>
       </section>
+
+      {/* EMBEDDED GOOGLE MAP */}
+      <Reveal anim="zoom" className="shell mt-6">
+        <div className="glass overflow-hidden rounded-3xl p-2">
+          <iframe title={`Map showing ${settings.clinicName}`} src={settings.mapEmbedUrl} className="h-80 w-full rounded-2xl sm:h-[420px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+        </div>
+      </Reveal>
     </>
   )
 }

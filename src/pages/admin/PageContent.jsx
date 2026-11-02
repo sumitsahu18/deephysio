@@ -17,7 +17,8 @@ const SCHEMA = {
           { key: 'welcome', label: 'Small heading above clinic name', wide: false },
           { key: 'tagline', label: 'Tagline' },
           { key: 'intro', label: 'Intro paragraph', type: 'textarea', rows: 3 },
-          { key: 'heroImage', label: 'Hero background photo', type: 'image' },
+          { key: 'heroImage', label: 'Hero photo (behind the glass card)', type: 'image' },
+          { key: 'backgroundImage', label: 'Website background photo (shows through the glass on every page)', type: 'image' },
           { key: 'conditionsTitle', label: 'Conditions heading', wide: false },
           { key: 'conditions', label: 'Conditions treated (one per line)', type: 'list', rows: 6 },
           { key: 'credentials', label: 'Practitioner credentials (one per line)', type: 'list', rows: 3 },
@@ -44,6 +45,10 @@ const SCHEMA = {
           { key: 'servicesEyebrow', label: 'Small heading', wide: false },
           { key: 'servicesTitle', label: 'Heading', wide: false },
         ],
+      },
+      {
+        title: 'Testimonials section',
+        fields: [{ key: 'testimonialsTitle', label: 'Heading', wide: false }],
       },
       {
         title: 'Block 1 (links to About & Team)',

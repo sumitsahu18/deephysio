@@ -20,6 +20,21 @@ Browser: `http://localhost:5173` · Admin: header ke last mein **Staff Login** b
 
 Login page par **Admin demo / Staff demo** button hain - click karo, details apne aap bhar jaati hain.
 
+## v6: Fluid Glassmorphism design (HR ka "Style 2")
+Poori public website naye look mein (admin panel same, sirf login page glass):
+- **Peeche ki layer**: clinic photo + dheere chalte teal / purple / coral gradients (`components/GlassBackground.jsx`).
+  Photo badalni ho to **Admin → Page content → Home → Website background photo**.
+- **Frosted glass cards** (blur + halka white border + inner glow) - `index.css` mein `glass`, `glass-soft`,
+  `glass-dark`, `glow-hover`, `grad-aurora`, `grad-sunset`, `grad-lagoon`, `btn-white`, `btn-glass`, `input-glass`.
+- **Layout**: desktop par left glass sidebar (menu + aaj open/closed + phone + Staff Login), upar glass top bar
+  (links, phone, social, Log In, **Book Appointment**). Mobile par left se slide hone wala glass drawer.
+- **Home**: glass hero card photo ke upar → contact / notice / hours cards → services bento grid (gradient cards)
+  → enquiry band → About / Home-visit cards → **Patient Testimonials**.
+- **Testimonials**: Admin → Testimonials (staff bhi add/edit). Ek SAMPLE card hai - client ke asli Google reviews
+  aate hi use delete karna (fake reviews UK CAP Code / ASA ke khilaf hain). List khali = section chhup jata hai.
+- Glow hover sirf shadow/border badalta hai, cards hilte nahi. Header height fixed. `prefers-reduced-motion` par gradients ruk jaate hain.
+- Fonts: headings **Outfit**, body **Roboto** (Google Fonts, `index.html`).
+
 ## v5 mein kya naya / fix hua
 - **FAQ page** (`/faq`) - menu aur footer mein link. Sawal/jawab **Admin → FAQs** se add/edit (staff bhi), delete sirf Admin.
   FAQ page ka heading/intro/photo **Admin → Page content → FAQ** se.
@@ -97,11 +112,11 @@ Exercise Therapy, Traction, Biomechanical Assessment) · Contact & Booking Enqui
 src/
   api/        axios.js (JWT interceptor) · endpoints.js (saari APIs + backend routes list) · mockDb.js
   context/    AuthContext (login, roles) · SiteContext (site + clinic + pages content)
-  components/ TopBar, Navbar, Footer, MobileCallBar, FloatingActions, Reveal, ServiceCard,
+  components/ GlassBackground, SideNav, Navbar (glass top bar + mobile drawer), SectionTitle, Footer, MobileCallBar, FloatingActions, Reveal, ServiceCard,
               PageHeader, CrudPage, DocForm, MediaInput, ProtectedRoute, Logo ...
   layouts/    PublicLayout, AdminLayout
   pages/      Home, About, Services, ServiceDetail, FAQ, Contact, Privacy, NotFound
-  pages/admin Login, Dashboard, Enquiries, PageContent, ContentPages (Services/Team/FAQs/Users),
+  pages/admin Login, Dashboard, Enquiries, PageContent, ContentPages (Services/Team/FAQs/Testimonials/Users),
               ClinicDetails, SiteSettings
   data/       seed.js (starting content) · images.js
 ```

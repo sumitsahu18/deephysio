@@ -9,12 +9,10 @@ export default function Privacy() {
   return (
     <>
       <PageHeader title={p.title} image={pages.about.headerImage} />
-      <section className="bg-white py-16">
-        <Reveal className="container-x max-w-3xl space-y-4 text-lg leading-relaxed text-ink/85">
-          {p.body?.split('\n').filter(Boolean).map((para, i) => <p key={i}>{para}</p>)}
-          <p>Contact: <a href={`mailto:${settings.email}`} className="text-pine-700 underline">{settings.email}</a></p>
-        </Reveal>
-      </section>
+      <Reveal className="shell glass mt-10 max-w-4xl space-y-4 rounded-3xl p-6 text-[17px] leading-relaxed text-white/80 sm:p-10">
+        {p.body?.split('\n').filter(Boolean).map((para, i) => <p key={i}>{para}</p>)}
+        <p>Contact: <a href={`mailto:${settings.email}`} className="text-aqua-300 underline">{settings.email}</a></p>
+      </Reveal>
     </>
   )
 }

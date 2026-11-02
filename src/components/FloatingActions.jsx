@@ -20,8 +20,8 @@ export default function FloatingActions() {
     <div className="fixed right-4 bottom-24 z-40 flex flex-col items-end gap-3 lg:bottom-6">
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`grid size-11 place-items-center rounded-sm bg-pine-700 text-white shadow-md transition duration-300 hover:bg-clay ${
-          showTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'
+        className={`glass grid size-11 place-items-center rounded-full text-white transition-opacity duration-300 hover:bg-white/25 ${
+          showTop ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         aria-label="Scroll to top"
         tabIndex={showTop ? 0 : -1}
@@ -34,7 +34,7 @@ export default function FloatingActions() {
           target="_blank"
           rel="noreferrer"
           aria-label="Chat with us on WhatsApp"
-          className="pulse grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition duration-300 hover:scale-110"
+          className="pulse grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors duration-300 hover:bg-[#1ebe5a]"
         >
           <WhatsAppIcon className="size-7" />
         </a>

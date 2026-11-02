@@ -18,6 +18,7 @@
 //   PUT    /api/services/:id      -> service                           (admin, editor)
 //   DELETE /api/services/:id      -> { ok }                            (admin)
 //   GET/POST/PUT/DELETE /api/team ...                                  (same pattern)
+//   GET/POST/PUT/DELETE /api/testimonials ...                          (GET public, POST/PUT admin+editor, DELETE admin)
 //   GET/POST/PUT/DELETE /api/faqs ...                                  (GET public, POST/PUT admin+editor, DELETE admin)
 //
 //   POST   /api/enquiries         -> enquiry  (public, rate-limited, emailed to clinic via SMTP)
@@ -65,6 +66,7 @@ function crud(collection) {
 export const servicesApi = crud('services')
 export const teamApi = crud('team')
 export const faqsApi = crud('faqs')
+export const testimonialsApi = crud('testimonials')
 export const enquiriesApi = crud('enquiries')
 export const usersApi = crud('users')
 

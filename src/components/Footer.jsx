@@ -18,14 +18,12 @@ function groupHours(hours = []) {
 }
 
 function H({ children }) {
-  return (
-    <h3 className="relative pb-3 text-lg font-bold text-white after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-10 after:bg-clay">
-      {children}
-    </h3>
-  )
+  return <h3 className="font-glass text-base font-semibold tracking-wide text-white">{children}</h3>
 }
 
-// Mingara footer: Quick Links | Services | Contact Info | Follow Us, phir copyright bar
+const linkCls = 'inline-block text-white/65 transition-colors hover:text-aqua-300'
+
+// Glass footer: Brand | Quick Links | Services | Contact, phir copyright
 export default function Footer() {
   const { settings } = useSite()
   const { data: services } = useFetch(servicesApi.list)
@@ -38,76 +36,75 @@ export default function Footer() {
   ].filter((s) => s.href)
 
   return (
-    <footer className="overflow-hidden bg-pine-900 pb-[76px] text-white/75 lg:pb-0">
-      <div className="container-x grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <H>Quick Links</H>
-          <ul className="mt-5 space-y-2.5 text-[15px]">
-            {[
-              ['/', 'Home'],
-              ['/about', 'About & Team'],
-              ['/services', 'Services & Treatments'],
-              ['/faq', 'FAQ'],
-              ['/contact', 'Contact & Booking Enquiry'],
-              ['/privacy', 'Privacy Policy'],
-              ['/admin/login', 'Staff Login'],
-            ].map(([to, l]) => (
-              <li key={to}>
-                <Link to={to} className="inline-block transition-colors hover:text-white">{l}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <H>Services</H>
-          <ul className="mt-5 space-y-2.5 text-[15px]">
-            {sorted.map((s) => (
-              <li key={s._id}>
-                <Link to={`/services/${s.slug}`} className="inline-block transition-colors hover:text-white">{s.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <H>Contact Info</H>
-          <ul className="mt-5 space-y-4 text-[15px]">
-            <li className="flex gap-3 break-words"><MapPin className="mt-0.5 size-5 shrink-0 text-clay" /> {settings.address}</li>
-            <li>
-              <a href={`tel:${settings.phoneHref}`} className="flex gap-3 hover:text-white"><Phone className="mt-0.5 size-5 shrink-0 text-clay" /> {settings.phone}</a>
-            </li>
-            <li>
-              <a href={`mailto:${settings.email}`} className="flex gap-3 break-all hover:text-white"><Mail className="mt-0.5 size-5 shrink-0 text-clay" /> {settings.email}</a>
-            </li>
-            <li className="flex gap-3">
-              <Clock className="mt-0.5 size-5 shrink-0 text-clay" />
-              <span>{groupHours(settings.hours).map((t) => <span key={t} className="block">{t}</span>)}</span>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <H>Follow Us</H>
-          {socials.length > 0 && (
-            <div className="mt-5 flex gap-3">
-              {socials.map(({ href, label, Icon }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} className="grid size-11 place-items-center rounded-sm bg-white/10 text-white transition-colors duration-300 hover:bg-clay">
-                  <Icon className="size-5" />
-                </a>
-              ))}
-            </div>
-          )}
-          <div className="mt-8">
+    <footer className="px-4 pb-[88px] sm:px-6 lg:px-8 lg:pb-8">
+      <div className="glass shell relative isolate overflow-hidden rounded-3xl">
+        <div className="inner-glow opacity-60" />
+        <div className="grid gap-10 p-7 sm:grid-cols-2 sm:p-10 lg:grid-cols-4">
+          <div>
             <Logo light />
+            <p className="mt-4 text-sm leading-relaxed text-white/65">{settings.address}</p>
+            {socials.length > 0 && (
+              <div className="mt-5 flex gap-2.5">
+                {socials.map(({ href, label, Icon }) => (
+                  <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} className="grid size-10 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:border-white/50 hover:bg-white/20">
+                    <Icon className="size-4" />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <H>Quick Links</H>
+            <ul className="mt-4 space-y-2.5 text-[15px]">
+              {[
+                ['/', 'Home'],
+                ['/about', 'About & Team'],
+                ['/services', 'Services & Treatments'],
+                ['/faq', 'FAQ'],
+                ['/contact', 'Contact & Booking Enquiry'],
+                ['/privacy', 'Privacy Policy'],
+                ['/admin/login', 'Staff Login'],
+              ].map(([to, l]) => (
+                <li key={to}>
+                  <Link to={to} className={linkCls}>{l}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <H>Services</H>
+            <ul className="mt-4 space-y-2.5 text-[15px]">
+              {sorted.map((s) => (
+                <li key={s._id}>
+                  <Link to={`/services/${s.slug}`} className={linkCls}>{s.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <H>Contact</H>
+            <ul className="mt-4 space-y-3.5 text-sm text-white/70">
+              <li>
+                <a href={`tel:${settings.phoneHref}`} className="flex gap-3 hover:text-white"><Phone className="mt-0.5 size-4 shrink-0 text-aqua-300" /> {settings.phone}</a>
+              </li>
+              <li>
+                <a href={`mailto:${settings.email}`} className="flex gap-3 [overflow-wrap:anywhere] hover:text-white"><Mail className="mt-0.5 size-4 shrink-0 text-aqua-300" /> {settings.email}</a>
+              </li>
+              <li className="flex gap-3"><MapPin className="mt-0.5 size-4 shrink-0 text-aqua-300" /> <span className="break-words">{settings.address}</span></li>
+              <li className="flex gap-3">
+                <Clock className="mt-0.5 size-4 shrink-0 text-aqua-300" />
+                <span>{groupHours(settings.hours).map((t) => <span key={t} className="block">{t}</span>)}</span>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/10 bg-[#163a59]">
-        <p className="container-x py-5 text-center text-sm text-white/60">
+        <div className="border-t border-white/10 px-7 py-5 text-center text-xs text-white/50 sm:px-10">
           Copyright © {year} {settings.legalName}. All rights reserved. Company No. {settings.companyNumber}.
-        </p>
+        </div>
       </div>
     </footer>
   )

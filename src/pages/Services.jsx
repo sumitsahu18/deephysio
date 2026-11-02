@@ -9,8 +9,9 @@ import Spinner from '../components/Spinner'
 import Reveal from '../components/Reveal'
 
 // SERVICES / TREATMENTS
-// PDF 2.2 (3): "Clear, structured service breakdown written to describe care rather than
-//               make unsubstantiated medical claims (UK CAP Code / ASA)."
+// PDF 2.2 (3): structured service breakdown, describes care (UK CAP Code / ASA - no cure claims)
+const TONES = ['glass', 'glass', 'aurora', 'glass', 'sunset', 'glass']
+
 export default function Services() {
   const { pages } = useSite()
   const p = pages.services
@@ -20,26 +21,24 @@ export default function Services() {
   return (
     <>
       <PageHeader title={p.title} intro={p.intro} image={p.headerImage} />
-      <section className="bg-sand py-20">
-        <div className="container-x">
-          {loading && <Spinner />}
-          {error && <p className="text-red-700">{error}</p>}
-          <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {sorted.map((s, i) => (
-              <ServiceCard key={s._id} service={s} index={i} delay={(i % 3) * 120} />
-            ))}
-          </div>
-          {p.disclaimer && (
-            <Reveal anim="fade">
-              <p className="mx-auto mt-14 max-w-3xl text-center text-sm leading-relaxed text-muted">{p.disclaimer}</p>
-            </Reveal>
-          )}
-          <Reveal className="mt-8 text-center">
-            <Link to="/contact#enquiry" className="btn-primary rounded-sm px-10 py-4 text-base">
-              Book / Enquire <ArrowRight className="size-4" />
-            </Link>
-          </Reveal>
+      <section className="shell mt-10">
+        {loading && <Spinner />}
+        {error && <p className="text-coral-300">{error}</p>}
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {sorted.map((s, i) => (
+            <ServiceCard key={s._id} service={s} variant="photo" tone={TONES[i % TONES.length]} delay={(i % 3) * 100} />
+          ))}
         </div>
+        {p.disclaimer && (
+          <Reveal anim="fade">
+            <p className="glass-soft mx-auto mt-10 max-w-3xl rounded-2xl p-5 text-center text-sm leading-relaxed text-white/70">{p.disclaimer}</p>
+          </Reveal>
+        )}
+        <Reveal className="mt-8 text-center">
+          <Link to="/contact#enquiry" className="btn-white px-8 py-3.5 text-base">
+            Book Appointment <ArrowRight className="size-4" />
+          </Link>
+        </Reveal>
       </section>
     </>
   )

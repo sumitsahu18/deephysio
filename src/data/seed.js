@@ -51,6 +51,7 @@ export const seedPages = {
     intro:
       'Expert, hands-on physiotherapy in Smethwick, Birmingham, designed to help you move better, feel stronger and get back to what you love.',
     heroImage: IMAGES.hero,
+    backgroundImage: IMAGES.clinic,
     conditionsTitle: 'Conditions we treat',
     conditions: [
       'Back & neck pain',
@@ -68,6 +69,7 @@ export const seedPages = {
     bandText: 'Send us a quick message and our reception team will contact you to arrange a time that suits you.',
     bandImage: IMAGES.band,
     servicesTitle: 'Our Services',
+    testimonialsTitle: 'Patient Testimonials',
     servicesEyebrow: 'What we do',
     feature1: {
       eyebrow: 'About us',
@@ -241,6 +243,22 @@ export const seedFaqs = [
   { _id: 'f4', order: 4, q: 'How many sessions will I need?', a: 'It varies from person to person. After your initial assessment we will talk you through a suggested plan.' },
   { _id: 'f5', order: 5, q: 'Do you offer home visits?', a: 'Yes. Local home visits are available. Please call us to check availability for your area.' },
   { _id: 'f6', order: 6, q: 'Which languages do you speak?', a: 'Our team can help you in English, Hindi, Gujarati and Punjabi.' },
+]
+
+// ---------------------------------------------------------------------------
+// TESTIMONIALS - Admin > Testimonials. SIRF asli patient reviews daalna (Google reviews se,
+// patient ki permission ke saath) - UK CAP Code / ASA. Ye ek SAMPLE hai, client ke reviews aate hi delete karo.
+// Koi testimonial na ho to Home par section apne aap chhup jata hai.
+// ---------------------------------------------------------------------------
+export const seedTestimonials = [
+  {
+    _id: 't1',
+    order: 1,
+    name: 'Sample review',
+    text: 'This is a sample card to show the layout. Replace it with a real patient review (for example from Google) in Admin → Testimonials.',
+    rating: 5,
+    source: 'Placeholder',
+  },
 ]
 
 export const seedEnquiries = []

@@ -1,4 +1,4 @@
-import { servicesApi, teamApi, faqsApi, usersApi } from '../../api/endpoints'
+import { servicesApi, teamApi, faqsApi, testimonialsApi, usersApi } from '../../api/endpoints'
 import { SERVICE_ICONS } from '../../components/Icon'
 import CrudPage from '../../components/CrudPage'
 
@@ -99,6 +99,31 @@ export function AdminFaqs() {
       fields={[
         { name: 'q', label: 'Question', required: true },
         { name: 'a', label: 'Answer', type: 'textarea', required: true },
+        { name: 'order', label: 'Display order', type: 'number', default: 10 },
+      ]}
+    />
+  )
+}
+
+export function AdminTestimonials() {
+  return (
+    <CrudPage
+      title="Testimonials"
+      intro="Patient reviews shown on the Home page. Only add genuine reviews you have permission to use (for example from Google), and do not edit their meaning (UK CAP Code / ASA). If the list is empty the section is hidden."
+      api={testimonialsApi}
+      sortBy="order"
+      newLabel="Add testimonial"
+      columns={[
+        { key: 'name', label: 'Name', render: (t) => <span className="font-medium">{t.name}</span> },
+        { key: 'text', label: 'Review', render: (t) => <span className="line-clamp-2 text-muted">{t.text}</span> },
+        { key: 'rating', label: 'Stars', render: (t) => '★'.repeat(Math.max(0, Math.min(5, t.rating || 0))) || '—' },
+      ]}
+      fields={[
+        { name: 'name', label: 'Patient name (or initials)', required: true },
+        { name: 'text', label: 'Review text', type: 'textarea', required: true },
+        { name: 'rating', label: 'Star rating (1-5)', type: 'number', default: 5 },
+        { name: 'source', label: 'Source / date', help: 'e.g. Google review, March 2026' },
+        { name: 'photo', label: 'Photo (optional)', type: 'image' },
         { name: 'order', label: 'Display order', type: 'number', default: 10 },
       ]}
     />

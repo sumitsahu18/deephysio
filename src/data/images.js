@@ -5,6 +5,7 @@ const u = (id, w = 1600) => `https://images.unsplash.com/photo-${id}?auto=format
 export const IMAGES = {
   hero: u('1649751361457-01d3a696c7e6', 2200), // leg examination
   band: u('1519824145371-296894a0daa9', 2000),
+  clinic: u('1576091160550-2173dba999ef', 2000), // poori website ke peeche (glass ke through dikhta hai) - Admin > Page content > Home se badlo
   about: u('1645005512968-0c1fe99f0093', 1400), // shoulder treatment
   homeVisits: u('1773227055624-07b515ba87c5', 1400), // caregiver with elderly patient
   aboutHeader: u('1706353399656-210cca727a33', 2000),

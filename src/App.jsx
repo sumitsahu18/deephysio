@@ -23,6 +23,7 @@ const SiteSettings = lazy(() => import('./pages/admin/SiteSettings'))
 const AdminServices = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminServices })))
 const AdminTeam = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminTeam })))
 const AdminFaqs = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminFaqs })))
+const AdminTestimonials = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminTestimonials })))
 const AdminUsers = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminUsers })))
 
 const guard = (perm, el) => <ProtectedRoute permission={perm}>{el}</ProtectedRoute>
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="services" element={guard('services', <AdminServices />)} />
           <Route path="team" element={guard('team', <AdminTeam />)} />
           <Route path="faqs" element={guard('faqs', <AdminFaqs />)} />
+          <Route path="testimonials" element={guard('testimonials', <AdminTestimonials />)} />
           <Route path="clinic" element={guard('clinic', <ClinicDetails />)} />
           <Route path="site" element={guard('site', <SiteSettings />)} />
           <Route path="users" element={guard('users', <AdminUsers />)} />

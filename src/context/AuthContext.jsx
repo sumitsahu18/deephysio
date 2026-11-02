@@ -9,8 +9,8 @@ const AuthContext = createContext(null)
 //   editor -> clinic staff: page copy, media, treatments, team, FAQs, clinic hours/contact, enquiries.
 //             Users, site-wide settings aur delete NAHI kar sakta.
 export const ROLE_PERMISSIONS = {
-  admin: ['dashboard', 'pages', 'services', 'team', 'faqs', 'clinic', 'enquiries', 'site', 'users', 'delete'],
-  editor: ['dashboard', 'pages', 'services', 'team', 'faqs', 'clinic', 'enquiries'],
+  admin: ['dashboard', 'pages', 'services', 'team', 'faqs', 'testimonials', 'clinic', 'enquiries', 'site', 'users', 'delete'],
+  editor: ['dashboard', 'pages', 'services', 'team', 'faqs', 'testimonials', 'clinic', 'enquiries'],
 }
 
 export function AuthProvider({ children }) {
