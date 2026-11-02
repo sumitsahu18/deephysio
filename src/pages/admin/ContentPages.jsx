@@ -134,7 +134,11 @@ export function AdminUsers() {
   return (
     <CrudPage
       title="Users & roles"
+<<<<<<< HEAD
       intro="One sign-in page for everyone. Create an account with the person's email and a password, then tell them privately. Admin: full access. Staff (Content Editor): can edit page text, images, services, team, contact details & hours and view enquiries - cannot change theme, general settings or users, and cannot delete anything."
+=======
+      intro="Admin: full access. Staff (Content Editor): can edit page text, images, services, team, contact details & hours, and view enquiries. Staff cannot change theme colours, general settings or users, and cannot delete anything."
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
       api={usersApi}
       newLabel="Add user"
       columns={[
@@ -145,6 +149,7 @@ export function AdminUsers() {
           label: 'Role',
           render: (u) => (
             <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${u.role === 'admin' ? 'bg-pine-700 text-white' : 'bg-pine-50 text-pine-700'}`}>
+<<<<<<< HEAD
               {u.role === 'admin' ? 'Admin' : 'Staff'}
             </span>
           ),
@@ -161,6 +166,18 @@ export function AdminUsers() {
         { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor', help: 'editor = Staff / Content Editor (restricted). admin = full access.' },
         { name: 'password', label: 'Password', type: 'password', required: true, help: 'At least 10 characters with letters and numbers. When editing, leave blank to keep the current password, or type a new one to reset it.' },
         { name: 'active', label: 'Account active (untick to block sign-in immediately)', type: 'checkbox', default: true },
+=======
+              {u.role === 'admin' ? 'Admin' : 'Content Editor'}
+            </span>
+          ),
+        },
+      ]}
+      fields={[
+        { name: 'name', label: 'Name', required: true },
+        { name: 'email', label: 'Email', required: true },
+        { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor', help: 'editor = Staff / Content Editor (restricted)' },
+        { name: 'password', label: 'Password', type: 'password', required: true },
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
       ]}
     />
   )

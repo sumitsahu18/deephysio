@@ -18,7 +18,10 @@ const Login = lazy(() => import('./pages/admin/Login'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const Media = lazy(() => import('./pages/admin/Media'))
 const Theme = lazy(() => import('./pages/admin/Theme'))
+<<<<<<< HEAD
 const Account = lazy(() => import('./pages/admin/Account'))
+=======
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 const section = (name) => lazy(() => import('./pages/admin/Sections').then((m) => ({ default: m[name] })))
 const HomepageSection = section('HomepageSection')
 const AboutSection = section('AboutSection')
@@ -55,7 +58,10 @@ export default function App() {
           <Route path="media" element={guard('media', <Media />)} />
           <Route path="theme" element={guard('theme', <Theme />)} />
           <Route path="settings" element={guard('settings', <GeneralSection />)} />
+<<<<<<< HEAD
           <Route path="account" element={<Account />} />
+=======
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Routes>

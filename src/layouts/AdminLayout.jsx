@@ -37,9 +37,15 @@ export default function AdminLayout() {
     }
   }, [])
 
+<<<<<<< HEAD
   async function doLogout() {
     await logout() // server par session band + cookies saaf, phir login page
     navigate('/admin/login', { replace: true })
+=======
+  function doLogout() {
+    logout()
+    navigate('/admin/login')
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
   }
 
   const Sidebar = (
@@ -69,6 +75,7 @@ export default function AdminLayout() {
         ))}
       </nav>
       <div className="border-t border-white/10 p-4">
+<<<<<<< HEAD
         <NavLink to="/admin/account" className={({ isActive }) => `-m-2 flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/8 ${isActive ? 'bg-white/10' : ''}`} title="My account - change password">
           <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/30 bg-white/15 font-semibold">{user?.name?.[0] || 'U'}</span>
           <div className="min-w-0">
@@ -76,6 +83,15 @@ export default function AdminLayout() {
             <p className="truncate text-xs text-white/60">{roleLabel(user?.role)} · My account</p>
           </div>
         </NavLink>
+=======
+        <div className="flex items-center gap-3">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/30 bg-white/15 font-semibold">{user?.name?.[0] || 'U'}</span>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold">{user?.name}</p>
+            <p className="truncate text-xs text-white/60">{roleLabel(user?.role)}</p>
+          </div>
+        </div>
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
         <button onClick={doLogout} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 py-2 text-sm font-medium transition-colors hover:bg-white/15">
           <LogOut className="size-4" /> Log out
         </button>

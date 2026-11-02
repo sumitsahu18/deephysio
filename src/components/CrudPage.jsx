@@ -13,7 +13,11 @@ function toForm(fields, item = {}) {
   fields.forEach((fd) => {
     const v = item[fd.name]
     if (fd.type === 'list') f[fd.name] = (v || []).join('\n')
+<<<<<<< HEAD
     else if (fd.type === 'checkbox') f[fd.name] = !!(v ?? fd.default)
+=======
+    else if (fd.type === 'checkbox') f[fd.name] = !!v
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
     else if (fd.type === 'password') f[fd.name] = ''
     else f[fd.name] = v ?? fd.default ?? ''
   })

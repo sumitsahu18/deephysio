@@ -4,7 +4,11 @@
 // TEXT SOURCE: PDF (RFP) mein website ka copy nahi diya hai, isliye text clinic ki
 // current site deephysio.co.uk se liya hai (CAP/ASA ke hisaab se "claims" hata ke).
 // Team ke naam / HCPC numbers placeholder hain - client se lene hain.
+<<<<<<< HEAD
 import { IMAGES } from './images.js'
+=======
+import { IMAGES } from './images'
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 
 // Default glass theme (index.css ke @theme jaisa hi). Theme Settings mein "Reset" isi par le jata hai.
 export const DEFAULT_THEME = {

@@ -87,6 +87,7 @@ export const mock = {
   async login({ email, password }) {
     await wait()
     const user = load().users.find((u) => u.email.toLowerCase() === email.toLowerCase())
+<<<<<<< HEAD
     if (!user || user.password !== password) fail(401, 'Incorrect email or password.')
     if (user.active === false) fail(403, 'This account has been disabled. Please contact the clinic admin.')
     return { token: makeToken(user), user: publicUser(user) }
@@ -103,6 +104,11 @@ export const mock = {
     save(db)
     return { ok: true }
   },
+=======
+    if (!user || user.password !== password) fail(401, 'Invalid email or password')
+    return { token: makeToken(user), user: publicUser(user) }
+  },
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
   async me(token) {
     await wait(80)
     const p = decodeToken(token)

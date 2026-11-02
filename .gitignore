@@ -1,9 +1,12 @@
 node_modules
 dist
 .env
+<<<<<<< HEAD
 .env.*
 !.env.example
 uploads
 logs
 *.log
+=======
+>>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 .DS_Store
