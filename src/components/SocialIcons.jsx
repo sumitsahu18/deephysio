@@ -25,6 +25,16 @@ export function WhatsAppIcon(props) {
   )
 }
 
+// Admin > General Settings ka WhatsApp number (digits, country code ke saath) -> dikhane layak text
+//   447737610615 -> +44 7737 610615   |   919876543210 -> +91 98765 43210
+export function formatWhatsapp(number = '') {
+  const d = String(number).replace(/\D/g, '')
+  if (!d) return ''
+  if (d.startsWith('44') && d.length === 12) return `+44 ${d.slice(2, 6)} ${d.slice(6)}`
+  if (d.startsWith('91') && d.length === 12) return `+91 ${d.slice(2, 7)} ${d.slice(7)}`
+  return `+${d}`
+}
+
 export const whatsappLink = (number, text = 'Hello, I would like to ask about an appointment.') =>
   number ? `https://wa.me/${number}?text=${encodeURIComponent(text)}` : ''
 

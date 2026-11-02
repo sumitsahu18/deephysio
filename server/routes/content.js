@@ -40,11 +40,22 @@ r.put(
 )
 
 // Clinic: phone, email, address, hours, map - staff bhi (PDF: reception hours/contact khud badle)
+// Phone numbers (phone, phoneHref) General Settings ka hissa hain -> sirf Admin.
 r.put(
   '/clinic',
   requireAuth,
   requirePerm('contact'),
-  asyncH(async (req, res) => res.json(await saveDoc('clinic', clinicSchema.parse(req.body)))),
+  asyncH(async (req, res) => {
+    const data = clinicSchema.parse(req.body)
+    if (!hasPermission(req.user.role, 'settings')) {
+      const current = await getDoc('clinic')
+      for (const k of ['phone', 'phoneHref']) {
+        if (data[k] === undefined || data[k] === current[k]) delete data[k]
+        else throw new HttpError(403, 'Only an admin can change the phone number.')
+      }
+    }
+    res.json(await saveDoc('clinic', data))
+  }),
 )
 
 // Pages: har page apne section ke permission se

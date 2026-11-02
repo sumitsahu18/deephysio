@@ -24,9 +24,10 @@ export default function ClinicDetails() {
     setSaving(true)
     setMsg({})
     try {
+      // Phone numbers General Settings (Admin) se badalte hain - yahan se nahi bheje jaate
+      const { phone: _p, phoneHref: _ph, ...rest } = form
       const body = {
-        ...form,
-        phoneHref: form.phoneHref || form.phone.replace(/[^\d+]/g, '').replace(/^0/, '+44'),
+        ...rest,
         languages: (typeof form.languages === 'string' ? form.languages.split(',') : form.languages).map((s) => s.trim()).filter(Boolean),
         hours: form.hours.filter((h) => h.day.trim()),
       }
@@ -53,15 +54,13 @@ export default function ClinicDetails() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl font-semibold">Clinic details</h2>
-          <p className="mt-1 text-muted">Phone, email, address and opening hours used across the whole website.</p>
+          <p className="mt-1 text-muted">Email, address, opening hours and map used across the whole website. (Phone & WhatsApp numbers: General Settings, admin only.)</p>
         </div>
         <SaveBar saving={saving} msg={msg} />
       </div>
 
       <section className="card grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
         <h2 className="text-lg font-semibold sm:col-span-2">Contact information</h2>
-        {input('phone', 'Phone number (as displayed)')}
-        {input('phoneHref', 'Phone for click-to-call', 'International format, e.g. +447737610615')}
         {input('email', 'Email address')}
         <div>
           <label className="label" htmlFor="languages">Languages spoken (comma separated)</label>

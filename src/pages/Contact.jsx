@@ -6,6 +6,7 @@ import { enquiriesApi, getErrorMessage } from '../api/endpoints'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { todayName } from '../utils/hours'
+import { WhatsAppIcon, whatsappLink, formatWhatsapp } from '../components/SocialIcons'
 
 // CONTACT & BOOKING ENQUIRY
 // PDF 2.2 (4): enquiry form, click-to-call, opening hours, embedded Google Map.
@@ -146,6 +147,11 @@ export default function Contact() {
                 <span className="block font-glass text-2xl font-semibold">{settings.phone}</span>
               </span>
             </a>
+            {settings.whatsapp && (
+              <a href={whatsappLink(settings.whatsapp)} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:underline">
+                <WhatsAppIcon className="size-5 shrink-0" /> <span>WhatsApp {formatWhatsapp(settings.whatsapp)}</span>
+              </a>
+            )}
             <a href={`mailto:${settings.email}`} className="flex items-center gap-3 hover:underline">
               <Mail className="size-5 shrink-0" /> <span className="break-all">{settings.email}</span>
             </a>

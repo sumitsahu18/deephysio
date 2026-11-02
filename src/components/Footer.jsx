@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { useSite } from '../context/SiteContext'
 import { servicesApi } from '../api/endpoints'
 import useFetch from '../hooks/useFetch'
-import { FacebookIcon, InstagramIcon, WhatsAppIcon, whatsappLink } from './SocialIcons'
+import { FacebookIcon, InstagramIcon, WhatsAppIcon, whatsappLink, formatWhatsapp } from './SocialIcons'
 import Logo from './Logo'
 
 // [Mon..Fri same time] -> 'Mon–Fri: 09:00 - 17:00'
@@ -90,6 +90,13 @@ export default function Footer() {
               <li>
                 <a href={`tel:${settings.phoneHref}`} className="flex gap-3 hover:text-white"><Phone className="mt-0.5 size-4 shrink-0 text-aqua-300" /> {settings.phone}</a>
               </li>
+              {settings.whatsapp && (
+                <li>
+                  <a href={whatsappLink(settings.whatsapp)} target="_blank" rel="noreferrer" className="flex gap-3 hover:text-white">
+                    <WhatsAppIcon className="mt-0.5 size-4 shrink-0 text-aqua-300" /> WhatsApp {formatWhatsapp(settings.whatsapp)}
+                  </a>
+                </li>
+              )}
               <li>
                 <a href={`mailto:${settings.email}`} className="flex gap-3 [overflow-wrap:anywhere] hover:text-white"><Mail className="mt-0.5 size-4 shrink-0 text-aqua-300" /> {settings.email}</a>
               </li>

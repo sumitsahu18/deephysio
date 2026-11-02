@@ -91,7 +91,7 @@ export function ContactSection() {
   return (
     <Section
       title="Contact & Enquiries"
-      intro="Website enquiries, phone, email, address, opening hours and Google Map."
+      intro="Website enquiries, email, address, opening hours and Google Map."
       tabs={[
         { key: 'enquiries', label: 'Enquiries', el: <Enquiries /> },
         { key: 'details', label: 'Contact details & hours', el: <ClinicDetails /> },

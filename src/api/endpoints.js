@@ -2,17 +2,12 @@
 // VITE_USE_MOCK=true -> mockDb (localStorage), false -> asli Express backend.
 //
 // Backend banate waqt ye routes banane hain (Express + MongoDB + JWT):
-<<<<<<< HEAD
 //   POST   /api/auth/login        -> { user } + httpOnly cookies (access 15 min, refresh 7 din)
 //   POST   /api/auth/refresh      -> naye cookies (rotation)
 //   POST   /api/auth/logout
 //   GET    /api/auth/me           -> { user }                          (JWT cookie)
 //   POST   /api/auth/change-password { currentPassword, newPassword }
 //   (Backend: server/ folder - routes server/routes/*.js)
-=======
-//   POST   /api/auth/login        -> { token, user }
-//   GET    /api/auth/me           -> { user }                          (JWT)
->>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 //
 //   GET    /api/site              -> site settings                     (public)
 //   PUT    /api/site              -> site settings                     (admin)
@@ -41,11 +36,7 @@
 //   GET    /api/media             -> [ { _id, url, name, size } ]      (admin, editor)
 //   DELETE /api/media/:id         -> { ok }  file bhi delete            (admin)
 
-<<<<<<< HEAD
 import api from './axios'
-=======
-import api, { TOKEN_KEY } from './axios'
->>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 import { mock } from './mockDb'
 
 export const USE_MOCK = (import.meta.env.VITE_USE_MOCK ?? 'true') !== 'false'
@@ -53,7 +44,6 @@ export const USE_MOCK = (import.meta.env.VITE_USE_MOCK ?? 'true') !== 'false'
 const data = (p) => p.then((r) => r.data)
 
 // ---------- Auth ----------
-<<<<<<< HEAD
 // Real: JWT httpOnly cookies (server). Mock (demo): token browser mein, sirf demo ke liye.
 const MOCK_TOKEN = 'dp_mock_token'
 export const authApi = {
@@ -70,11 +60,6 @@ export const authApi = {
   },
   changePassword: (body) =>
     USE_MOCK ? mock.changePassword(localStorage.getItem(MOCK_TOKEN), body) : data(api.post('/auth/change-password', body)),
-=======
-export const authApi = {
-  login: (creds) => (USE_MOCK ? mock.login(creds) : data(api.post('/auth/login', creds))),
-  me: () => (USE_MOCK ? mock.me(localStorage.getItem(TOKEN_KEY)) : data(api.get('/auth/me'))),
->>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 }
 
 // ---------- Singleton documents ----------

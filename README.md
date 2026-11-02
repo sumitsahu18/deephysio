@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # DeePhysio – Website + Admin (MERN: React + Express + MongoDB)
 
 Client RFP (DeephysiNew Website Proposal) ke hisaab se: glass design website, ek hi admin dashboard,
@@ -103,34 +102,21 @@ handover (cheat-sheet, video, live session, 30-din warranty) ki dates.
 
 ## Changelog
 
+## v12: Phone numbers General Settings mein
+- Admin → **General Settings → Phone & WhatsApp**: Phone number (as displayed), Phone for click-to-call, WhatsApp number - teeno ek jagah.
+- Contact & Enquiries → Contact details mein ab sirf email, address, opening hours, map (staff bhi badal sakta hai).
+- Phone number sirf Admin badal sakta hai (server par bhi check). Galat click-to-call format par samjhane wala message.
+
+## v11: WhatsApp number dynamic
+- Admin → General Settings → **WhatsApp number** (country code ke saath, jaise 447737610615) ab text ke roop mein bhi dikhta hai:
+  Home ka contact card, Contact page, Footer + green WhatsApp button (tooltip). Sab jagah click = WhatsApp chat.
+- Admin mein type karte hi preview: "Shown on the website as +44 7737 610615". Khali chhodo = har jagah se hat jata hai.
+
 ## v10: Backend + database + JWT login
 - `server/` Express + MongoDB: saara content (site, clinic, pages, services, team, FAQs, testimonials, media, enquiries, users) database mein.
 - Login page: Admin/Staff demo hata diya - ek hi email + password login; staff accounts admin banata hai.
 - My account (password change), Users mein Active/Disabled + password reset.
 - Security upar table mein. Production mein ek hi Express server website + API + uploads deta hai (Nginx ke peeche).
-=======
-# DeePhysio – Frontend (React + Vite + Tailwind CSS v4)
-
-Client ke RFP PDF ("DeephysiNew Website Proposal") ke hisaab se bana hua frontend.
-Layout / animation reference: mingaramed.com.au. Backend (Express + MongoDB + JWT) agla step hai;
-tab tak **demo mode** mein data browser ke localStorage mein save hota hai.
-
-## Chalane ka tarika (Antigravity / VS Code)
-
-```bash
-npm install
-copy .env.example .env      # Windows   (Mac/Linux: cp .env.example .env)
-npm run dev
-```
-Browser: `http://localhost:5173` · Admin: header ke last mein **Staff Login** button (ya `http://localhost:5173/admin/login`)
-
-| Role | Email | Password |
-|---|---|---|
-| Admin | admin@deephysio.co.uk | admin123 |
-| Staff / Content Editor (reception) | editor@deephysio.co.uk | editor123 |
-
-Login page par **Admin demo / Staff demo** button hain - click karo, details apne aap bhar jaati hain.
->>>>>>> 7f723cae747664c324f371ef57f411b38bbad52e
 
 ## v9: Logo admin se badlo
 - **Admin → General Settings → Site details → Logo**: upload / library se chuno / link, Remove = default logo wapas.

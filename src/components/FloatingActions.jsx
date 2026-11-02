@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowUp } from 'lucide-react'
 import { useSite } from '../context/SiteContext'
-import { WhatsAppIcon, whatsappLink } from './SocialIcons'
+import { WhatsAppIcon, whatsappLink, formatWhatsapp } from './SocialIcons'
 
 // WhatsApp chat (client ke order form se) + Scroll to Top (Mingara mein hai)
 export default function FloatingActions() {
@@ -33,7 +33,8 @@ export default function FloatingActions() {
           href={wa}
           target="_blank"
           rel="noreferrer"
-          aria-label="Chat with us on WhatsApp"
+          aria-label={`Chat with us on WhatsApp ${formatWhatsapp(settings.whatsapp)}`}
+          title={`WhatsApp ${formatWhatsapp(settings.whatsapp)}`}
           className="pulse grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors duration-300 hover:bg-[#1ebe5a]"
         >
           <WhatsAppIcon className="size-7" />

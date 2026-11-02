@@ -7,6 +7,7 @@ import Reveal from '../components/Reveal'
 import ServiceCard from '../components/ServiceCard'
 import SectionTitle from '../components/SectionTitle'
 import Spinner from '../components/Spinner'
+import { WhatsAppIcon, whatsappLink, formatWhatsapp } from '../components/SocialIcons'
 import { onImgError } from '../data/images'
 import { todayName, isOpenNow } from '../utils/hours'
 
@@ -80,6 +81,12 @@ function InfoCards({ p, settings }) {
             <p className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/70 uppercase"><Phone className="size-4" /> Telephone</p>
             <a href={`tel:${settings.phoneHref}`} className="mt-1.5 block font-glass text-3xl font-semibold hover:underline">{settings.phone}</a>
           </div>
+          {settings.whatsapp && (
+            <div>
+              <p className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/70 uppercase"><WhatsAppIcon className="size-4" /> WhatsApp</p>
+              <a href={whatsappLink(settings.whatsapp)} target="_blank" rel="noreferrer" className="mt-1.5 block text-lg font-semibold hover:underline">{formatWhatsapp(settings.whatsapp)}</a>
+            </div>
+          )}
           <div>
             <p className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/70 uppercase"><MapPin className="size-4" /> Address</p>
             <p className="mt-1.5 leading-snug text-white/90">{settings.address}</p>
