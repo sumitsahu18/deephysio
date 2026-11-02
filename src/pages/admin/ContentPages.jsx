@@ -134,7 +134,7 @@ export function AdminUsers() {
   return (
     <CrudPage
       title="Users & roles"
-      intro="Admin: full access. Content Editor: can edit page text, images, services, team, clinic hours and contact details, and view enquiries. Editors cannot manage users, change site settings or delete anything."
+      intro="Admin: full access. Staff (Content Editor): can edit page text, images, services, team, contact details & hours, and view enquiries. Staff cannot change theme colours, general settings or users, and cannot delete anything."
       api={usersApi}
       newLabel="Add user"
       columns={[
@@ -153,7 +153,7 @@ export function AdminUsers() {
       fields={[
         { name: 'name', label: 'Name', required: true },
         { name: 'email', label: 'Email', required: true },
-        { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor', help: 'editor = Content Editor (clinic staff)' },
+        { name: 'role', label: 'Role', type: 'select', options: ['editor', 'admin'], default: 'editor', help: 'editor = Staff / Content Editor (restricted)' },
         { name: 'password', label: 'Password', type: 'password', required: true },
       ]}
     />

@@ -20,7 +20,7 @@ export default function FAQ() {
     <>
       <PageHeader crumb="FAQ" title={p.title || 'Frequently Asked Questions'} intro={p.intro} image={p.headerImage} />
 
-      <section className="shell mt-10 grid gap-6 lg:grid-cols-3">
+      <section className="shell mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-3 lg:col-span-2">
           {loading && <Spinner />}
           {error && <p className="text-coral-300">{error}</p>}

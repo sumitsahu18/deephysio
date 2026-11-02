@@ -28,6 +28,9 @@
 //
 //   GET/POST/PUT/DELETE /api/users ...                                 (admin only)
 //   POST   /api/uploads           -> { url }  (multer; image upload)   (admin, editor)
+//                                    sirf jpg/png/webp, max 5 MB, random filename, media collection mein entry
+//   GET    /api/media             -> [ { _id, url, name, size } ]      (admin, editor)
+//   DELETE /api/media/:id         -> { ok }  file bhi delete            (admin)
 
 import api, { TOKEN_KEY } from './axios'
 import { mock } from './mockDb'
@@ -67,23 +70,34 @@ export const servicesApi = crud('services')
 export const teamApi = crud('team')
 export const faqsApi = crud('faqs')
 export const testimonialsApi = crud('testimonials')
+export const mediaApi = crud('media')
 export const enquiriesApi = crud('enquiries')
 export const usersApi = crud('users')
 
 // ---------- Image upload ----------
-// Mock: chhoti image browser mein data-URL ban ke save hoti hai.
-// Backend: multipart upload -> /api/uploads -> { url }
-export const MAX_MOCK_IMAGE_KB = 700
+// Mock: image browser mein hi chhoti (max 1600px, JPEG) karke data-URL banti hai + Media library mein entry.
+// Backend: multipart upload -> /api/uploads -> { url } (server khud media entry banata hai)
+export const MAX_UPLOAD_MB = 8
+const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+
+async function compress(file, maxSide = 1600, quality = 0.82) {
+  const bmp = await createImageBitmap(file)
+  const scale = Math.min(1, maxSide / Math.max(bmp.width, bmp.height))
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.round(bmp.width * scale)
+  canvas.height = Math.round(bmp.height * scale)
+  canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height)
+  bmp.close?.()
+  return canvas.toDataURL(file.type === 'image/png' ? 'image/png' : 'image/jpeg', quality)
+}
+
 export async function uploadImage(file) {
+  if (!ALLOWED.includes(file.type)) throw new Error('Please choose a JPG, PNG, WebP or GIF image.')
+  if (file.size > MAX_UPLOAD_MB * 1024 * 1024) throw new Error(`Please use an image under ${MAX_UPLOAD_MB} MB.`)
   if (USE_MOCK) {
-    if (file.size > MAX_MOCK_IMAGE_KB * 1024)
-      throw new Error(`Demo mode: please use an image under ${MAX_MOCK_IMAGE_KB} KB, or paste an image URL.`)
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = () => reject(new Error('Could not read the file'))
-      reader.readAsDataURL(file)
-    })
+    const url = await compress(file)
+    await mock.create('media', { url, name: file.name, size: Math.round((url.length * 3) / 4) })
+    return url
   }
   const form = new FormData()
   form.append('image', file)

@@ -9,8 +9,8 @@ import GlassBackground from '../../components/GlassBackground'
 
 // Demo logins (sirf mock mode). Backend lagne ke baad ye box apne aap hat jayega.
 const DEMO = {
-  admin: { email: 'admin@deephysio.co.uk', password: 'admin123', label: 'Admin', note: 'Full access: users, site settings, delete', Icon: UserCog },
-  editor: { email: 'editor@deephysio.co.uk', password: 'editor123', label: 'Staff', note: 'Reception: text, hours, services, team, FAQs, enquiries', Icon: Headset },
+  admin: { email: 'admin@deephysio.co.uk', password: 'admin123', label: 'Admin', note: 'Full access: everything incl. theme colours, settings, users and delete', Icon: UserCog },
+  editor: { email: 'editor@deephysio.co.uk', password: 'editor123', label: 'Staff', note: 'Content only: pages, services, team, contact & hours, enquiries, images. No theme, settings or users.', Icon: Headset },
 }
 
 export default function Login() {
@@ -51,7 +51,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative grid min-h-dvh place-items-center px-4 py-10 text-white">
+    <div className="theme-glass relative grid min-h-dvh place-items-center px-4 py-10 text-white">
       <GlassBackground />
       <div className="w-full max-w-md">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/80 transition-colors hover:text-white">

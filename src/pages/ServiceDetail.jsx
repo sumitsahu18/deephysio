@@ -29,18 +29,18 @@ export default function ServiceDetail() {
     <article>
       <PageHeader crumb={`Services / ${s.title}`} title={s.title} intro={s.summary} image={s.image} />
 
-      <section className="shell mt-10 grid gap-6 lg:grid-cols-3">
+      <section className="shell mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Reveal className="glass rounded-3xl p-6 sm:p-9">
+          <Reveal className="glass rounded-3xl p-5 min-[400px]:p-6 sm:p-9">
             <h2 className="font-glass text-2xl font-semibold">What it involves</h2>
             <div className="mt-4 space-y-4 text-[17px] leading-relaxed text-white/80">
               {s.body?.split('\n').filter(Boolean).map((para, i) => <p key={i}>{para}</p>)}
             </div>
           </Reveal>
           {s.helpsWith?.length > 0 && (
-            <Reveal className="glass rounded-3xl p-6 sm:p-9">
+            <Reveal className="glass rounded-3xl p-5 min-[400px]:p-6 sm:p-9">
               <h2 className="font-glass text-2xl font-semibold">May form part of care for</h2>
-              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              <ul className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {s.helpsWith.map((h) => (
                   <li key={h} className="flex gap-3 rounded-2xl border border-white/12 bg-white/8 p-4 text-white/90">
                     <Check className="size-5 shrink-0 text-aqua-300" /> {h}

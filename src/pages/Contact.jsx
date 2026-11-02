@@ -9,9 +9,9 @@ import { todayName } from '../utils/hours'
 
 // CONTACT & BOOKING ENQUIRY
 // PDF 2.2 (4): enquiry form, click-to-call, opening hours, embedded Google Map.
-// PDF 2.4 Data Minimisation: SIRF Name, Email/Phone, Preferred Contact Time, Message.
+// PDF 2.4 Data Minimisation: SIRF Name, Email, Phone, Preferred Contact Time, Message.
 // PDF 2.4 Enquiry Delivery: backend clinic email par authenticated SMTP se bhejega.
-const empty = { name: '', contact: '', preferredTime: 'Any time', message: '', consent: false, website: '' }
+const empty = { name: '', email: '', phone: '', preferredTime: 'Any time', message: '', consent: false, website: '' }
 const err = 'mt-1 text-sm text-coral-300'
 
 export default function Contact() {
@@ -28,10 +28,12 @@ export default function Contact() {
   function validate() {
     const e = {}
     if (form.name.trim().length < 2) e.name = 'Please enter your name.'
-    const c = form.contact.trim()
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c)
-    const isPhone = /^[+\d][\d\s()-]{7,}$/.test(c)
-    if (!isEmail && !isPhone) e.contact = 'Please enter a valid email address or phone number.'
+    const email = form.email.trim()
+    const phone = form.phone.trim()
+    if (!email && !phone) e.email = 'Please give us an email address or a phone number.'
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'Please enter a valid email address.'
+    if (phone && !/^[+\d][\d\s()-]{7,}$/.test(phone)) e.phone = 'Please enter a valid phone number.'
+    if (form.message.trim().length > 2000) e.message = 'Please keep your message under 2000 characters.'
     if (form.message.trim().length < 5) e.message = 'Please add a short message.'
     if (!form.consent) e.consent = 'Please tick this box so we can contact you.'
     setErrors(e)
@@ -46,7 +48,8 @@ export default function Contact() {
     setServerError('')
     try {
       const { consent, website, ...payload } = form
-      await enquiriesApi.create({ ...payload, status: 'new' })
+      const clean = Object.fromEntries(Object.entries(payload).map(([k, v]) => [k, String(v).trim()]))
+      await enquiriesApi.create({ ...clean, status: 'new' })
       setStatus('sent')
       setForm(empty)
     } catch (error) {
@@ -59,9 +62,9 @@ export default function Contact() {
     <>
       <PageHeader title={p.title} intro={p.intro} image={p.headerImage} />
 
-      <section className="shell mt-10 grid gap-6 lg:grid-cols-5">
+      <section className="shell mt-10 grid grid-cols-1 gap-6 lg:grid-cols-5">
         {/* ENQUIRY FORM */}
-        <Reveal anim="left" id="enquiry" className="glass relative isolate scroll-mt-28 overflow-hidden rounded-3xl p-6 sm:p-9 lg:col-span-3">
+        <Reveal anim="left" id="enquiry" className="glass relative isolate scroll-mt-28 overflow-hidden rounded-3xl p-5 min-[400px]:p-6 sm:p-9 lg:col-span-3">
           <div className="inner-glow opacity-50" />
           {status === 'sent' ? (
             <div className="py-12 text-center" role="status">
@@ -84,21 +87,26 @@ export default function Contact() {
                   {errors.name && <p className={err}>{errors.name}</p>}
                 </div>
                 <div>
-                  <label htmlFor="contact" className="label-glass">Email or phone <span className="text-coral-300">*</span></label>
-                  <input id="contact" className="input-glass" value={form.contact} onChange={set('contact')} aria-invalid={!!errors.contact} />
-                  {errors.contact && <p className={err}>{errors.contact}</p>}
+                  <label htmlFor="email" className="label-glass">Email</label>
+                  <input id="email" type="email" className="input-glass" value={form.email} onChange={set('email')} autoComplete="email" aria-invalid={!!errors.email} />
+                  {errors.email && <p className={err}>{errors.email}</p>}
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="preferredTime" className="label-glass">Preferred contact time</label>
+                <div>
+                  <label htmlFor="phone" className="label-glass">Phone</label>
+                  <input id="phone" type="tel" className="input-glass" value={form.phone} onChange={set('phone')} autoComplete="tel" aria-invalid={!!errors.phone} />
+                  {errors.phone && <p className={err}>{errors.phone}</p>}
+                </div>
+                <div>
+                  <label htmlFor="preferredTime" className="label-glass">Preferred contact time</label>
                 <select id="preferredTime" className="input-glass" value={form.preferredTime} onChange={set('preferredTime')}>
                   <option>Any time</option>
                   <option>Morning</option>
                   <option>Afternoon</option>
                   <option>Evening</option>
                 </select>
+                </div>
               </div>
+              <p className="-mt-2 text-xs text-white/55">Please give us at least one way to reach you (email or phone).</p>
 
               <div>
                 <label htmlFor="message" className="label-glass">Message <span className="text-coral-300">*</span></label>
@@ -110,7 +118,7 @@ export default function Contact() {
               <input type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} className="hidden" aria-hidden="true" />
 
               <label className="flex gap-3 text-sm text-white/80">
-                <input type="checkbox" checked={form.consent} onChange={set('consent')} className="mt-0.5 size-4 shrink-0 accent-teal-400" />
+                <input type="checkbox" checked={form.consent} onChange={set('consent')} className="mt-0.5 size-4 shrink-0 accent-aqua" />
                 <span>
                   I agree to {settings.clinicName} using these details to respond to my enquiry, as described in the{' '}
                   <Link to="/privacy" className="font-medium text-aqua-300 underline">privacy policy</Link>.

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import PublicLayout from './layouts/PublicLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Spinner from './components/Spinner'
@@ -16,15 +16,14 @@ import NotFound from './pages/NotFound'
 const AdminLayout = lazy(() => import('./layouts/AdminLayout'))
 const Login = lazy(() => import('./pages/admin/Login'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
-const Enquiries = lazy(() => import('./pages/admin/Enquiries'))
-const PageContent = lazy(() => import('./pages/admin/PageContent'))
-const ClinicDetails = lazy(() => import('./pages/admin/ClinicDetails'))
-const SiteSettings = lazy(() => import('./pages/admin/SiteSettings'))
-const AdminServices = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminServices })))
-const AdminTeam = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminTeam })))
-const AdminFaqs = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminFaqs })))
-const AdminTestimonials = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminTestimonials })))
-const AdminUsers = lazy(() => import('./pages/admin/ContentPages').then((m) => ({ default: m.AdminUsers })))
+const Media = lazy(() => import('./pages/admin/Media'))
+const Theme = lazy(() => import('./pages/admin/Theme'))
+const section = (name) => lazy(() => import('./pages/admin/Sections').then((m) => ({ default: m[name] })))
+const HomepageSection = section('HomepageSection')
+const AboutSection = section('AboutSection')
+const ServicesSection = section('ServicesSection')
+const ContactSection = section('ContactSection')
+const GeneralSection = section('GeneralSection')
 
 const guard = (perm, el) => <ProtectedRoute permission={perm}>{el}</ProtectedRoute>
 
@@ -44,19 +43,18 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Admin (JWT protected, role based) */}
         <Route path="/admin/login" element={<Login />} />
+        {/* ONE admin dashboard (JWT protected, role based) */}
         <Route path="/admin" element={guard(null, <AdminLayout />)}>
           <Route index element={<Dashboard />} />
-          <Route path="enquiries" element={guard('enquiries', <Enquiries />)} />
-          <Route path="pages" element={guard('pages', <PageContent />)} />
-          <Route path="services" element={guard('services', <AdminServices />)} />
-          <Route path="team" element={guard('team', <AdminTeam />)} />
-          <Route path="faqs" element={guard('faqs', <AdminFaqs />)} />
-          <Route path="testimonials" element={guard('testimonials', <AdminTestimonials />)} />
-          <Route path="clinic" element={guard('clinic', <ClinicDetails />)} />
-          <Route path="site" element={guard('site', <SiteSettings />)} />
-          <Route path="users" element={guard('users', <AdminUsers />)} />
+          <Route path="homepage" element={guard('homepage', <HomepageSection />)} />
+          <Route path="about" element={guard('about', <AboutSection />)} />
+          <Route path="services" element={guard('services', <ServicesSection />)} />
+          <Route path="contact" element={guard('contact', <ContactSection />)} />
+          <Route path="media" element={guard('media', <Media />)} />
+          <Route path="theme" element={guard('theme', <Theme />)} />
+          <Route path="settings" element={guard('settings', <GeneralSection />)} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Routes>
     </Suspense>

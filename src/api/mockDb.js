@@ -1,6 +1,6 @@
 // Fake backend: jab tak Express/MongoDB nahi bana, data browser ke localStorage mein rehta hai.
 // Admin panel mein kiya change public site par turant dikhta hai.
-import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedFaqs, seedTestimonials, seedEnquiries, seedUsers } from '../data/seed'
+import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedFaqs, seedTestimonials, seedMedia, seedEnquiries, seedUsers } from '../data/seed'
 
 const KEY = 'dp_mock_db_v4'
 const wait = (ms = 200) => new Promise((r) => setTimeout(r, ms))
@@ -24,6 +24,7 @@ const SEED = () => ({
   team: seedTeam,
   faqs: seedFaqs,
   testimonials: seedTestimonials,
+  media: seedMedia,
   enquiries: seedEnquiries,
   users: seedUsers,
 })
@@ -111,7 +112,7 @@ export const mock = {
     return db[name]
   },
 
-  // Collections: services | team | faqs | testimonials | enquiries | users
+  // Collections: services | team | faqs | testimonials | media | enquiries | users
   async list(collection) {
     await wait()
     const items = load()[collection]

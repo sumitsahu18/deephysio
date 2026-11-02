@@ -36,13 +36,13 @@ export default function Footer() {
   ].filter((s) => s.href)
 
   return (
-    <footer className="px-4 pb-[88px] sm:px-6 lg:px-8 lg:pb-8">
+    <footer className="px-3 pb-[88px] min-[400px]:px-4 sm:px-6 lg:px-8 lg:pb-8">
       <div className="glass shell relative isolate overflow-hidden rounded-3xl">
         <div className="inner-glow opacity-60" />
         <div className="grid gap-10 p-7 sm:grid-cols-2 sm:p-10 lg:grid-cols-4">
           <div>
-            <Logo light />
-            <p className="mt-4 text-sm leading-relaxed text-white/65">{settings.address}</p>
+            <Logo light small />
+            <p className="mt-4 text-sm leading-relaxed text-white/65">{settings.footerText || settings.address}</p>
             {socials.length > 0 && (
               <div className="mt-5 flex gap-2.5">
                 {socials.map(({ href, label, Icon }) => (

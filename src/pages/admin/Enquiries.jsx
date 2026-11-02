@@ -36,15 +36,15 @@ export default function Enquiries() {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold">Enquiries</h1>
-      <p className="mt-1 text-muted">Messages sent from the website contact form.</p>
+      <h2 className="text-2xl font-semibold">Enquiries</h2>
+      <p className="mt-1 text-sm text-muted">Messages sent from the website contact form. Delete them once they are no longer needed.</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         {['all', ...STATUSES].map((s) => (
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize ${filter === s ? 'bg-pine-700 text-white' : 'border border-line bg-white'}`}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition-colors ${filter === s ? 'bg-pine-700' : 'border border-line bg-white hover:bg-sand'}`}
           >
             {s}
           </button>
@@ -58,17 +58,28 @@ export default function Enquiries() {
       ) : (
         <div className="mt-6 space-y-3">
           {list.map((e) => {
-            const isEmail = e.contact?.includes('@')
+            // Purani enquiries mein 'contact' field tha (email ya phone), nayi mein email + phone alag
+            const email = e.email || (e.contact?.includes('@') ? e.contact : '')
+            const phone = e.phone || (e.contact && !e.contact.includes('@') ? e.contact : '')
             return (
               <div key={e._id} className="card p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="font-semibold">{e.name}</p>
-                    <a href={isEmail ? `mailto:${e.contact}` : `tel:${e.contact}`} className="mt-1 flex items-center gap-1.5 text-sm text-pine-700">
-                      {isEmail ? <Mail className="size-4" /> : <Phone className="size-4" />} {e.contact}
-                    </a>
+                    <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                      {email && (
+                        <a href={`mailto:${email}`} className="flex items-center gap-1.5 text-pine-700 hover:underline">
+                          <Mail className="size-4" /> {email}
+                        </a>
+                      )}
+                      {phone && (
+                        <a href={`tel:${phone}`} className="flex items-center gap-1.5 text-pine-700 hover:underline">
+                          <Phone className="size-4" /> {phone}
+                        </a>
+                      )}
+                    </div>
                     <p className="mt-1 text-xs text-muted">
-                      Prefers: {e.preferredTime} · {new Date(e.createdAt).toLocaleString('en-GB')}
+                      Preferred contact time: {e.preferredTime} · {new Date(e.createdAt).toLocaleString('en-GB')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -84,7 +95,7 @@ export default function Enquiries() {
                     )}
                   </div>
                 </div>
-                <p className="mt-4 whitespace-pre-line rounded-xl bg-[#f2f6fa] p-4 text-sm">{e.message}</p>
+                <p className="mt-4 whitespace-pre-line rounded-xl bg-sand p-4 text-sm">{e.message}</p>
               </div>
             )
           })}

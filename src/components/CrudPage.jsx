@@ -86,10 +86,10 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">{title}</h1>
-          {intro && <p className="mt-1 text-muted">{intro}</p>}
+          <h2 className="text-2xl font-semibold">{title}</h2>
+          {intro && <p className="mt-1 max-w-3xl text-sm text-muted">{intro}</p>}
         </div>
-        <button className="btn-primary" onClick={() => open('new')}>
+        <button className="btn-primary w-full sm:w-auto" onClick={() => open('new')}>
           <Plus className="size-4" /> {newLabel}
         </button>
       </div>
@@ -99,9 +99,42 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
       {loading ? (
         <Spinner />
       ) : (
-        <div className="card mt-6 overflow-x-auto">
+        <>
+        {/* Mobile: har item ek card (table side-scroll nahi karni padti) */}
+        <ul className="mt-6 space-y-3 md:hidden">
+          {list.map((item) => (
+            <li key={item._id} className="card p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1 text-sm">{columns.find((c) => c.key !== 'order')?.render?.(item) ?? item[columns.find((c) => c.key !== 'order')?.key]}</div>
+                <div className="flex shrink-0">
+                  <button onClick={() => open(item)} className="inline-grid size-9 place-items-center rounded-lg text-pine-700 hover:bg-pine-50" aria-label="Edit">
+                    <Pencil className="size-4" />
+                  </button>
+                  {can('delete') && (
+                    <button onClick={() => remove(item)} className="inline-grid size-9 place-items-center rounded-lg text-red-700 hover:bg-red-50" aria-label="Delete">
+                      <Trash2 className="size-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <dl className="mt-2 space-y-1 text-sm">
+                {columns
+                  .filter((c) => c.key !== 'order' && c !== columns.find((x) => x.key !== 'order'))
+                  .map((c) => (
+                    <div key={c.key} className="flex min-w-0 gap-2">
+                      <dt className="shrink-0 text-muted">{c.label}:</dt>
+                      <dd className="min-w-0 [overflow-wrap:anywhere]">{c.render ? c.render(item) : item[c.key]}</dd>
+                    </div>
+                  ))}
+              </dl>
+            </li>
+          ))}
+          {list.length === 0 && <li className="card p-6 text-center text-sm text-muted">Nothing here yet.</li>}
+        </ul>
+
+        <div className="card mt-6 hidden overflow-x-auto md:block">
           <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-line bg-[#f2f6fa] text-xs uppercase tracking-wide text-muted">
+            <thead className="border-b border-line bg-sand text-xs uppercase tracking-wide text-muted">
               <tr>
                 {columns.map((c) => (
                   <th key={c.key} className="px-5 py-3 font-semibold">{c.label}</th>
@@ -111,7 +144,7 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
             </thead>
             <tbody className="divide-y divide-line">
               {list.map((item) => (
-                <tr key={item._id} className="hover:bg-[#f7fafc]">
+                <tr key={item._id} className="transition-colors hover:bg-sand">
                   {columns.map((c) => (
                     <td key={c.key} className="px-5 py-4 align-top">
                       {c.render ? c.render(item) : item[c.key]}
@@ -137,15 +170,16 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
             </tbody>
           </table>
         </div>
+        </>
       )}
 
       {/* Modal */}
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true">
-          <form onSubmit={save} className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-white p-6 sm:rounded-3xl">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/55 p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true">
+          <form onSubmit={save} className="glass-dark max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-3xl p-6 sm:rounded-3xl">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold">{editing === 'new' ? newLabel : 'Edit'}</h2>
-              <button type="button" onClick={() => setEditing(null)} aria-label="Close" className="grid size-9 place-items-center rounded-full hover:bg-sand">
+              <button type="button" onClick={() => setEditing(null)} aria-label="Close" className="grid size-9 place-items-center rounded-full bg-white/10 hover:bg-white/20">
                 <X className="size-5" />
               </button>
             </div>

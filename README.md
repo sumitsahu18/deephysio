@@ -20,14 +20,57 @@ Browser: `http://localhost:5173` · Admin: header ke last mein **Staff Login** b
 
 Login page par **Admin demo / Staff demo** button hain - click karo, details apne aap bhar jaati hain.
 
+## v9: Logo admin se badlo
+- **Admin → General Settings → Site details → Logo**: upload / library se chuno / link, Remove = default logo wapas.
+  Save karte hi header, footer, admin sidebar aur login page par naya logo. (Media / Images mein bhi "Logo" slot - sirf Admin.)
+- Staff logo nahi badal sakta (global setting). Logo "In use" rehta hai, library se delete nahi hota.
+- Best: transparent PNG, light colour, chauda (wide) shape.
+
+## v8: Poora responsive (280px se 1440px tak test kiya)
+- **Header**: chhoti screen par "Book Appointment" -> "Book" -> sirf icon, logo bhi chhota - menu (☰) button kabhi screen se bahar nahi katta.
+- Saari grids mein `grid-cols-1` base (pehle lambe content se grid screen se chaudi ho jaati thi).
+- Hero / page headings fluid size (`clamp`) + lamba shabd toot jata hai (jaise BIOMECHANICAL).
+- Mobile par cards / padding chhote, neeche ka Call/Enquire bar ek line mein.
+- **Admin**: dashboard se "Manage the website" hataya (sections sidebar mein hain) - uski jagah poori **Latest enquiries**
+  (naam, email, phone, preferred time, message, date). Mobile par admin lists table ki jagah cards, tabs wrap hote hain,
+  mobile header mein logo.
+- Test: har width par koi button / text screen ya apne box se bahar nahi (Playwright).
+
+## v7: Sidebar hata, saaf header, ONE admin dashboard (client brief ke hisaab se)
+**Website**
+- Landing page se **left sidebar hata diya** - ab full-width glass layout.
+- **Header**: 3 saaf hisse, beech mein barabar jagah -> `[Logo]  [Home · About & Team · Services ▾ · FAQ · Contact]  [Log In] [Book Appointment]`.
+  Mobile par header ke neeche slide-down glass menu (sidebar nahi). Height fixed - scroll par nahi hilta.
+- Enquiry form: **Name, Email, Phone, Preferred contact time, Message** (email ya phone mein se kam se kam ek zaroori).
+  Koi medical dropdown / pain-scale nahi.
+
+**Admin - ek hi dashboard (glass look mein), sidebar:**
+| Section | Andar kya hai | Staff? |
+|---|---|---|
+| Dashboard | ginti, sab sections ke shortcut, latest enquiries, Preview website | ✅ |
+| Homepage & Pages | Homepage text/buttons/photos · Testimonials · FAQ · FAQ page text · Privacy Policy | ✅ |
+| About & Team | Team members (photo, qualification, HCPC/CSP) · About page text | ✅ |
+| Services | Services add/edit (delete sirf admin) · Services page text | ✅ |
+| Contact & Enquiries | Enquiries (name, email, phone, time, message, delete) · Phone/email/address/hours/Google Map · Contact page text | ✅ |
+| Media / Images | Website ki har photo yahin se **Replace** · Upload · jo photo use nahi ho rahi wo Delete | ✅ (delete ❌) |
+| Theme Settings | Primary, secondary, accent, button, button text, background, text colour - colour picker + live preview + Reset | ❌ admin only |
+| General Settings | Clinic/company details, footer text, social links · Users & roles | ❌ admin only |
+
+- Har form par **Save changes**, upar **Preview website** button.
+- Theme colours CSS variables hain (`index.css` `@theme` + `SiteContext.applyTheme`) - save karte hi poori website + admin par lagte hain.
+- Upload: sirf JPG/PNG/WebP/GIF, max 8 MB. Demo mode mein photo browser mein hi chhoti (1600px) ho jaati hai.
+- Admin ka glass look: `index.css` ke end mein `.admin-glass` - purane admin tokens (card, input, btn-primary...) glass mein remap.
+
+**Agle step (abhi nahi kiya):** Express + MongoDB backend (routes `src/api/endpoints.js` mein likhe hain), SMTP enquiry email,
+Terms & Conditions page, Home par "Why Choose Us" section, hero buttons ka text/link admin se.
+
 ## v6: Fluid Glassmorphism design (HR ka "Style 2")
 Poori public website naye look mein (admin panel same, sirf login page glass):
 - **Peeche ki layer**: clinic photo + dheere chalte teal / purple / coral gradients (`components/GlassBackground.jsx`).
   Photo badalni ho to **Admin → Page content → Home → Website background photo**.
 - **Frosted glass cards** (blur + halka white border + inner glow) - `index.css` mein `glass`, `glass-soft`,
   `glass-dark`, `glow-hover`, `grad-aurora`, `grad-sunset`, `grad-lagoon`, `btn-white`, `btn-glass`, `input-glass`.
-- **Layout**: desktop par left glass sidebar (menu + aaj open/closed + phone + Staff Login), upar glass top bar
-  (links, phone, social, Log In, **Book Appointment**). Mobile par left se slide hone wala glass drawer.
+- ~~Layout: left glass sidebar~~ (v7 mein hata diya - ab full-width header).
 - **Home**: glass hero card photo ke upar → contact / notice / hours cards → services bento grid (gradient cards)
   → enquiry band → About / Home-visit cards → **Patient Testimonials**.
 - **Testimonials**: Admin → Testimonials (staff bhi add/edit). Ek SAMPLE card hai - client ke asli Google reviews
@@ -112,11 +155,12 @@ Exercise Therapy, Traction, Biomechanical Assessment) · Contact & Booking Enqui
 src/
   api/        axios.js (JWT interceptor) · endpoints.js (saari APIs + backend routes list) · mockDb.js
   context/    AuthContext (login, roles) · SiteContext (site + clinic + pages content)
-  components/ GlassBackground, SideNav, Navbar (glass top bar + mobile drawer), SectionTitle, Footer, MobileCallBar, FloatingActions, Reveal, ServiceCard,
+  components/ GlassBackground, Navbar (glass header + mobile menu), SectionTitle, MediaInput, MediaPicker, Footer, MobileCallBar, FloatingActions, Reveal, ServiceCard,
               PageHeader, CrudPage, DocForm, MediaInput, ProtectedRoute, Logo ...
   layouts/    PublicLayout, AdminLayout
   pages/      Home, About, Services, ServiceDetail, FAQ, Contact, Privacy, NotFound
-  pages/admin Login, Dashboard, Enquiries, PageContent, ContentPages (Services/Team/FAQs/Testimonials/Users),
+  pages/admin Login, Dashboard, Sections (Homepage/About/Services/Contact/General tabs), Media, Theme,
+              Enquiries, PageContent, ContentPages (Services/Team/FAQs/Testimonials/Users),
               ClinicDetails, SiteSettings
   data/       seed.js (starting content) · images.js
 ```

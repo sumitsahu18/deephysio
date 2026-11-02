@@ -6,6 +6,17 @@
 // Team ke naam / HCPC numbers placeholder hain - client se lene hain.
 import { IMAGES } from './images'
 
+// Default glass theme (index.css ke @theme jaisa hi). Theme Settings mein "Reset" isi par le jata hai.
+export const DEFAULT_THEME = {
+  primary: '#2dd4bf', // highlights, links, glow
+  secondary: '#8b5cf6', // gradients
+  accent: '#f2706b', // warm gradient cards
+  background: '#072e37',
+  button: '#ffffff',
+  buttonText: '#072e37',
+  text: '#ffffff',
+}
+
 // ---------------------------------------------------------------------------
 // 1) SITE SETTINGS - sirf ADMIN badal sakta hai (PDF: editor "site-wide settings" nahi badlega)
 // ---------------------------------------------------------------------------
@@ -17,6 +28,10 @@ export const seedSite = {
   facebookUrl: 'https://facebook.com/',
   instagramUrl: 'https://instagram.com/',
   whatsapp: '447737610615', // country code ke saath, bina + aur spaces ke. Khali = button hide
+  footerText: 'Hands-on, HCPC-registered physiotherapy in Smethwick, Birmingham.',
+  logoUrl: '', // Admin > General Settings > Logo. Khali = default logo
+  // Admin > Theme Settings. Ye colours poori website (aur admin) par CSS variables ban ke lagte hain.
+  theme: { ...DEFAULT_THEME },
 }
 
 // ---------------------------------------------------------------------------
@@ -260,6 +275,9 @@ export const seedTestimonials = [
     source: 'Placeholder',
   },
 ]
+
+// Media library (Admin > Media / Images). Upload ki hui images yahan list hoti hain.
+export const seedMedia = []
 
 export const seedEnquiries = []
 

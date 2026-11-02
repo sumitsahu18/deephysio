@@ -21,13 +21,13 @@ function Hero({ p, settings }) {
         {p.heroImage && (
           <img src={p.heroImage} alt="" onError={onImgError} fetchPriority="high" className="hero-zoom absolute inset-0 -z-20 size-full object-cover object-center" />
         )}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(105deg,rgba(7,46,55,0.7)_0%,rgba(7,46,55,0.3)_55%,rgba(7,46,55,0.1)_100%)]" />
+        <div className="absolute inset-0 -z-10 photo-fade" />
 
-        <div className="flex min-h-[560px] items-center p-4 sm:p-8 lg:min-h-[600px] lg:p-12">
-          <div className="glass relative isolate w-full max-w-2xl overflow-hidden rounded-3xl p-6 sm:p-10">
+        <div className="flex min-h-[520px] items-center p-2.5 min-[400px]:p-4 sm:min-h-[560px] sm:p-8 lg:min-h-[600px] lg:p-12">
+          <div className="glass relative isolate w-full max-w-2xl overflow-hidden rounded-[1.25rem] p-5 min-[400px]:p-6 sm:rounded-3xl sm:p-10">
             <div className="inner-glow" />
             <p className="anim-fade-down eyebrow-glass">{p.welcome} {settings.clinicName}</p>
-            <h1 className="anim-fade-up mt-3 font-glass text-[2.1rem] leading-[1.05] font-bold tracking-tight uppercase [animation-delay:120ms] sm:text-5xl lg:text-[3.4rem]">
+            <h1 className="anim-fade-up mt-3 font-glass text-[clamp(1.55rem,8vw,2.1rem)] leading-[1.05] font-bold tracking-tight uppercase [overflow-wrap:anywhere] hyphens-auto [animation-delay:120ms] sm:text-5xl lg:text-[3.4rem]">
               {p.tagline}
             </h1>
             <p className="anim-fade-up mt-5 max-w-xl text-base leading-relaxed text-white/85 [animation-delay:240ms] sm:text-lg">{p.intro}</p>
@@ -72,7 +72,7 @@ function InfoCards({ p, settings }) {
   const today = todayName()
   const open = isOpenNow(settings.hours)
   return (
-    <section className="shell mt-6 grid gap-5 lg:grid-cols-3">
+    <section className="shell mt-6 grid grid-cols-1 gap-5 lg:grid-cols-3">
       {/* Contact */}
       <Reveal className="grad-lagoon glow-hover relative isolate overflow-hidden rounded-3xl border border-white/20 p-7">
         <div className="space-y-5">
@@ -108,8 +108,8 @@ function InfoCards({ p, settings }) {
 
       {/* Opening hours */}
       <Reveal delay={200} className="glass glow-hover rounded-3xl p-7">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="flex items-center gap-2 font-glass text-xl font-semibold whitespace-nowrap">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="flex items-center gap-2 font-glass text-xl font-semibold">
             <Clock className="size-5 text-aqua-300" /> Opening Hours
           </h2>
           <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${open ? 'bg-emerald-400/20 text-emerald-200' : 'bg-white/10 text-white/70'}`}>
@@ -153,7 +153,7 @@ function Services({ p }) {
       {loading ? (
         <Spinner className="text-white/70" />
       ) : (
-        <div className="mt-7 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {sorted.slice(0, 5).map((s, i) => (
             <ServiceCard key={s._id} service={s} tone={layout[i].tone} className={layout[i].cls} cta={layout[i].cta} delay={(i % 3) * 100} />
           ))}
@@ -189,7 +189,7 @@ function Features({ p }) {
     { f: p.feature2, to: '/contact#enquiry' },
   ].filter((x) => x.f)
   return (
-    <section className="shell mt-16 grid gap-5 md:grid-cols-2">
+    <section className="shell mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
       {items.map(({ f, to }, i) => (
         <Reveal key={to} delay={i * 120} className="glass glow-hover group flex flex-col overflow-hidden rounded-3xl">
           <div className="relative aspect-[16/9] overflow-hidden bg-white/5">
@@ -223,7 +223,7 @@ function Testimonials({ p }) {
       <SectionTitle eyebrow="Kind words" title={p.testimonialsTitle || 'Patient Testimonials'} />
       <div className={`mt-7 grid gap-5 ${list.length > 1 ? 'md:grid-cols-2' : ''}`}>
         {list.map((t, i) => (
-          <Reveal key={t._id} delay={(i % 2) * 120} className="glass glow-hover relative isolate overflow-hidden rounded-3xl p-6 sm:p-8">
+          <Reveal key={t._id} delay={(i % 2) * 120} className="glass glow-hover relative isolate overflow-hidden rounded-3xl p-5 min-[400px]:p-6 sm:p-8">
             <div className="inner-glow opacity-70" />
             <Quote className="absolute top-6 right-6 size-10 text-white/15" />
             <div className="flex items-start gap-4">

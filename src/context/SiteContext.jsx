@@ -1,6 +1,24 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { siteApi, clinicApi, pagesApi } from '../api/endpoints'
-import { seedSite, seedClinic, seedPages } from '../data/seed'
+import { seedSite, seedClinic, seedPages, DEFAULT_THEME } from '../data/seed'
+
+// Theme Settings ke colour -> CSS variables (index.css ki saari classes inhi se bani hain)
+const THEME_VARS = {
+  primary: '--color-aqua',
+  secondary: '--color-violet',
+  accent: '--color-coral',
+  background: '--color-deep',
+  button: '--color-btn',
+  buttonText: '--color-btn-text',
+  text: '--color-text',
+}
+
+export function applyTheme(theme, el = document.documentElement) {
+  const t = { ...DEFAULT_THEME, ...(theme || {}) }
+  Object.entries(THEME_VARS).forEach(([k, v]) => {
+    if (/^#[0-9a-f]{3,8}$/i.test(t[k] || '')) el.style.setProperty(v, t[k])
+  })
+}
 
 // Poori public site ka content API se aata hai - koi text component mein hardcode nahi.
 //   settings = site (admin) + clinic (reception) details, ek object mein
@@ -21,6 +39,10 @@ export function SiteProvider({ children }) {
   useEffect(() => {
     refresh()
   }, [refresh])
+
+  useEffect(() => {
+    applyTheme(site.theme)
+  }, [site.theme])
 
   const settings = { ...site, ...clinic }
 

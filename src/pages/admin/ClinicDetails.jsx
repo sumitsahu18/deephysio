@@ -49,16 +49,16 @@ export default function ClinicDetails() {
   )
 
   return (
-    <form onSubmit={save} className="max-w-4xl space-y-6">
+    <form onSubmit={save} className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Clinic details</h1>
+          <h2 className="text-2xl font-semibold">Clinic details</h2>
           <p className="mt-1 text-muted">Phone, email, address and opening hours used across the whole website.</p>
         </div>
         <SaveBar saving={saving} msg={msg} />
       </div>
 
-      <section className="card grid gap-4 p-6 sm:grid-cols-2">
+      <section className="card grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
         <h2 className="text-lg font-semibold sm:col-span-2">Contact information</h2>
         {input('phone', 'Phone number (as displayed)')}
         {input('phoneHref', 'Phone for click-to-call', 'International format, e.g. +447737610615')}

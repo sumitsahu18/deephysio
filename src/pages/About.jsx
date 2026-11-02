@@ -27,8 +27,8 @@ export default function About() {
       <PageHeader title={p.title} intro={p.intro} image={p.headerImage} />
 
       {/* Our approach + credential badges */}
-      <section className="shell mt-10 grid gap-6 lg:grid-cols-5">
-        <Reveal anim="left" className="glass rounded-3xl p-6 sm:p-9 lg:col-span-3">
+      <section className="shell mt-10 grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <Reveal anim="left" className="glass rounded-3xl p-5 min-[400px]:p-6 sm:p-9 lg:col-span-3">
           <p className="eyebrow-glass">About us</p>
           <h2 className="mt-2 font-glass text-3xl font-semibold">{p.bodyTitle}</h2>
           <div className="mt-5 space-y-4 text-[17px] leading-relaxed text-white/80">
@@ -62,7 +62,7 @@ export default function About() {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {sortedTeam.map((m, i) => (
               <Reveal key={m._id} delay={(i % 3) * 100} className="glass glow-hover group overflow-hidden rounded-3xl">
                 <div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-white/5">

@@ -176,25 +176,24 @@ const SCHEMA = {
   },
 }
 
-export default function PageContent() {
+// Ek page ka text/images form. Admin ke section tabs mein use hota hai: <PageContent page="home" />
+export default function PageContent({ page: key }) {
   const { pages, setPages } = useSite()
-  const [tab, setTab] = useState('home')
-  const [form, setForm] = useState(pages)
+  const [form, setForm] = useState(pages[key] || {})
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState({})
+  const page = SCHEMA[key]
 
   useEffect(() => {
-    setForm(pages)
-  }, [pages])
-
-  const page = SCHEMA[tab]
+    setForm(pages[key] || {})
+  }, [pages, key])
 
   async function save(e) {
     e.preventDefault()
     setSaving(true)
     setMsg({})
     try {
-      const updated = await pagesApi.update({ [tab]: cleanLists(form[tab]) })
+      const updated = await pagesApi.update({ [key]: cleanLists(form) })
       setPages(updated)
       setMsg({ type: 'ok', text: 'Saved. Changes are live on the website.' })
     } catch (err) {
@@ -205,53 +204,25 @@ export default function PageContent() {
   }
 
   return (
-    <form onSubmit={save} className="max-w-4xl">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold">Page content</h1>
-          <p className="mt-1 text-muted">Edit the headings, text and photos on each page.</p>
-        </div>
+    <form onSubmit={save} className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted">Edit the headings, text and photos on the {page.label} page.</p>
         <a href={page.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-pine-700">
-          View page <ExternalLink className="size-4" />
+          Preview page <ExternalLink className="size-4" />
         </a>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-2" role="tablist">
-        {Object.entries(SCHEMA).map(([key, s]) => (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            aria-selected={tab === key}
-            onClick={() => {
-              setTab(key)
-              setMsg({})
-            }}
-            className={`rounded-full px-4 py-2 text-sm font-medium ${tab === key ? 'bg-pine-700 text-white' : 'border border-line bg-white hover:border-pine-500'}`}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
+      {page.groups.map((g) => (
+        <section key={g.title} className="card grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 sm:p-6">
+          <h2 className="text-lg font-semibold sm:col-span-2">{g.title}</h2>
+          {g.fields.map((f) => (
+            <Field key={f.key} field={f} value={getPath(form, f.key)} onChange={(v) => setForm((all) => setPath(all || {}, f.key, v))} />
+          ))}
+        </section>
+      ))}
 
-      <div className="mt-6 space-y-5">
-        {page.groups.map((g) => (
-          <section key={g.title} className="card grid gap-4 p-6 sm:grid-cols-2">
-            <h2 className="text-lg font-semibold sm:col-span-2">{g.title}</h2>
-            {g.fields.map((f) => (
-              <Field
-                key={f.key}
-                field={f}
-                value={getPath(form[tab], f.key)}
-                onChange={(v) => setForm((all) => ({ ...all, [tab]: setPath(all[tab] || {}, f.key, v) }))}
-              />
-            ))}
-          </section>
-        ))}
-      </div>
-
-      <div className="sticky bottom-0 mt-6 flex justify-end border-t border-line bg-[#f2f6fa]/95 py-4 backdrop-blur">
-        <SaveBar saving={saving} msg={msg} label={`Save ${page.label}`} />
+      <div className="sticky bottom-0 z-10 -mx-1 flex justify-end rounded-2xl border border-line bg-deep/70 px-4 py-3 backdrop-blur-xl">
+        <SaveBar saving={saving} msg={msg} label="Save changes" />
       </div>
     </form>
   )

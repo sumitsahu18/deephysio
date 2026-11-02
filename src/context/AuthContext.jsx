@@ -4,13 +4,13 @@ import { TOKEN_KEY } from '../api/axios'
 
 const AuthContext = createContext(null)
 
-// Roles (PDF 2.3 "Role Configuration"):
-//   admin  -> sab kuch: users, site settings, delete
-//   editor -> clinic staff: page copy, media, treatments, team, FAQs, clinic hours/contact, enquiries.
-//             Users, site-wide settings aur delete NAHI kar sakta.
+// Roles (client brief: ONE admin dashboard, staff ko restricted content-editing):
+//   admin  -> sab kuch: theme, general settings, users, delete
+//   editor -> clinic staff: homepage, about & team, services, contact & enquiries, media.
+//             Theme, general settings, users aur delete NAHI.
 export const ROLE_PERMISSIONS = {
-  admin: ['dashboard', 'pages', 'services', 'team', 'faqs', 'testimonials', 'clinic', 'enquiries', 'site', 'users', 'delete'],
-  editor: ['dashboard', 'pages', 'services', 'team', 'faqs', 'testimonials', 'clinic', 'enquiries'],
+  admin: ['dashboard', 'homepage', 'about', 'services', 'contact', 'media', 'theme', 'settings', 'users', 'delete'],
+  editor: ['dashboard', 'homepage', 'about', 'services', 'contact', 'media'],
 }
 
 export function AuthProvider({ children }) {
