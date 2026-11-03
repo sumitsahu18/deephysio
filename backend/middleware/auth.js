@@ -1,6 +1,6 @@
 import User from '../models/User.js'
 import { ACCESS_COOKIE, verifyAccess } from '../lib/tokens.js'
-import { hasPermission } from '../../src/lib/permissions.js'
+import { hasPermission } from '../lib/permissions.js'
 import { HttpError } from './errors.js'
 
 // Login zaroori. Har request par DB se user check: band account / badla password / badla role -> turant logout.
@@ -19,7 +19,7 @@ export async function requireAuth(req, _res, next) {
   next()
 }
 
-// Role permission (src/lib/permissions.js) - UI mein chhupana kaafi nahi, server bhi mana karta hai
+// Role permission (lib/permissions.js) - UI mein chhupana kaafi nahi, server bhi mana karta hai
 export const requirePerm =
   (...perms) =>
   (req, _res, next) => {

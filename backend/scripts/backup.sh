@@ -2,7 +2,7 @@
 # Roz ka backup: database (mongodump) + uploaded images. 14 din purane backups delete.
 # VPS par cron:  0 2 * * * /var/www/deephysio/server/scripts/backup.sh >> /var/log/deephysio-backup.log 2>&1
 set -euo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/.."  # backend folder
 source <(grep -E '^(MONGODB_URI|UPLOAD_DIR)=' .env | sed 's/^/export /')
 DEST="${BACKUP_DIR:-$HOME/backups/deephysio}/$(date +%F_%H%M)"
 mkdir -p "$DEST"

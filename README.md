@@ -1,49 +1,56 @@
-# DeePhysio – Website + Admin (MERN: React + Express + MongoDB)
-
-Client RFP (DeephysiNew Website Proposal) ke hisaab se: glass design website, ek hi admin dashboard,
-MongoDB database, JWT login (httpOnly cookies), restricted Staff role.
+# DeePhysio – Website + Admin (MERN)
 
 ```
-src/        React (Vite + Tailwind v4)  - website + admin
-server/     Express API + MongoDB (Mongoose)
-deploy/     PM2 + Nginx config (Hostinger VPS)
+DeePhysio/
+├── frontend/   React + Vite + Tailwind  → website + admin panel   (apna package.json, alag de sakte ho)
+├── backend/    Express + MongoDB + JWT  → API, database, uploads   (apna package.json, alag de sakte ho)
+└── package.json   (sirf shortcut: dono ek saath chalane ke liye)
 ```
 
----
+Dono folder **alag-alag** bhi chalte hain aur yahan se **ek saath** bhi.
 
-## 1. Local par chalana (Antigravity / VS Code)
+## Pehli baar setup (Windows / Antigravity)
+**Chahiye:** Node.js 20+ aur MongoDB (PC par MongoDB Community, ya MongoDB Atlas ka link).
 
-**Chahiye:** Node.js 20+ aur MongoDB - ya to apne PC par MongoDB Community, ya **MongoDB Atlas** ka free cluster (link copy karo).
-
-```bash
-npm install
-copy .env.example .env        # Mac/Linux: cp .env.example .env
+```powershell
+cd DeePhysio
+npm run install:all                      # root + backend + frontend packages
+copy backend\.env.example backend\.env    # Mac/Linux: cp
 ```
+`backend/.env` mein bharo: `MONGODB_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+(secret banane ke liye: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`).
+Purana project chal raha tha? Uski `.env` ko **`backend\.env`** mein copy kar do - wahi kaam karegi.
 
-`.env` kholo aur bharo:
-- `MONGODB_URI` - local: `mongodb://127.0.0.1:27017/deephysio` ya Atlas ka link
-- `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` - do alag random values:
-  `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`
-- `ADMIN_EMAIL`, `ADMIN_PASSWORD` - pehla admin (min 10 characters, letters + numbers)
-
-```bash
-npm run seed       # database mein starting content + pehla admin (dobara chalane se data nahi mitta)
-npm run dev:all    # website (5173) + API (5000) dono saath
+```powershell
+npm run seed      # sirf pehli baar: database mein content + pehla admin
+npm run dev       # website (5173) + API (5000) ek saath
 ```
+Website: http://localhost:5173 · Admin: http://localhost:5173/admin/login
 
-Website: http://localhost:5173 · Admin: http://localhost:5173/admin/login (wahi email/password jo .env mein diya).
-Seed ke baad `.env` se `ADMIN_PASSWORD` hata do.
+## Alag-alag chalana
+| | Terminal | Commands |
+|---|---|---|
+| Backend | `cd backend` | `npm install` → `.env` banao → `npm run seed` (pehli baar) → `npm run dev` |
+| Frontend | `cd frontend` | `npm install` → `npm run dev` |
 
-> Bina server ke sirf design dekhna ho: `.env` mein `VITE_USE_MOCK=true`, phir `npm run dev`
-> (demo login admin@deephysio.co.uk / admin123 - data sirf browser mein).
+Frontend local par apne aap `http://localhost:5000` wale backend se judta hai (`frontend/.env.development`).
+Backend ke bina sirf design dekhna ho: `frontend/.env.development` mein `VITE_USE_MOCK=true`.
 
+## Commands (root folder se)
 | Command | Kaam |
 |---|---|
-| `npm run dev:all` | website + API (development) |
-| `npm run dev` / `npm run server` | alag-alag |
-| `npm run seed` (`-- --reset`) | starting content / pehla admin (`--reset` = content dobara, users safe) |
-| `npm run build` | production website build (`dist/`) |
-| `npm start` | production server |
+| `npm run install:all` | teeno jagah packages |
+| `npm run dev` | website + API saath |
+| `npm run seed` | starting content + pehla admin (existing data safe) |
+| `npm run reset-admin` | password bhool gaye: `backend/.env` ke ADMIN_EMAIL ka password ADMIN_PASSWORD par reset |
+| `npm run build` | website build → `frontend/dist` |
+| `npm start` | production API (SERVE_CLIENT=true ho to website bhi) |
+
+## Netlify (sirf frontend)
+Site settings → Build & deploy → **Base directory: `frontend`**, Build command: `npm run build`, Publish directory: `dist`.
+Backend ke bina Netlify par demo mode chahiye to environment variable `VITE_USE_MOCK=true`.
+
+Details: `backend/README.md` (security, deployment) · `frontend/README.md`
 
 ## 2. Login & users
 - **Ek hi login page** (`/admin/login`) - Admin aur Staff dono email + password se. Role database se aata hai.
@@ -52,45 +59,6 @@ Seed ke baad `.env` se `ADMIN_PASSWORD` hata do.
 - Staff (Content Editor) - PDF 2.3: page text, images, services, team, contact & hours, enquiries.
   **Nahi:** theme, general settings, logo, users, delete. Ye server par bhi enforced hai (sirf menu chhupana nahi).
 
-## 3. Security (kya-kya laga hai)
-| Cheez | Kaise |
-|---|---|
-| Passwords | bcrypt (cost 12), min 10 chars letters + numbers |
-| JWT | access 15 min + refresh 7 din, **httpOnly + SameSite=Strict + Secure** cookies (JS token padh hi nahi sakta) |
-| Refresh | har baar naya token (rotation); purana dobara use hua = chori -> us user ke saare sessions band |
-| Logout / password / role change / account band | turant saare purane login invalid (tokenVersion) |
-| Brute force | login rate-limit (10 / 15 min per IP) + 5 galat password = account 15 min lock |
-| CSRF | SameSite=Strict + custom header + Origin check |
-| Input | har route par zod validation; extra fields hat jaate hain; NoSQL injection blocked (`sanitizeFilter`) |
-| Headers | helmet: CSP, HSTS, nosniff, frame-ancestors none, referrer policy |
-| CORS | sirf `CLIENT_ORIGINS` |
-| Uploads | sirf JPG/PNG/WebP/GIF, max 5 MB, file ke andar check (sharp), dobara encode (EXIF/GPS + chhupa code hat jata hai), random naam, folder listing nahi |
-| Enquiry form | validation + honeypot + rate-limit (5 / ghanta per IP); sirf Name, Email, Phone, Preferred time, Message (PDF 2.4) |
-| Enquiry email | authenticated SMTP, sirf plain text (form ka text code nahi ban sakta) |
-| Data retention | `ENQUIRY_RETENTION_DAYS` se purani enquiries apne aap delete (UK GDPR) |
-| Errors | production mein andar ki details user ko nahi dikhti |
-| Secrets | sirf `.env` (Git / zip mein kabhi nahi) |
-
-Tested: 64 API security tests + browser end-to-end tests (login, roles, upload, enquiry, refresh, logout).
-
-## 4. Deployment - Hostinger VPS (PDF 2.1 ke hisaab se)
-1. **Staging pehle** (`staging.deephysio.co.uk`, password + noindex - `deploy/nginx.conf` mein). Client ki **written approval** ke baad hi live.
-2. **Database:** MongoDB Atlas (London/EU region, client ke account mein) → Database user **sirf `deephysio` database ka readWrite**, Network Access mein sirf VPS ka IP.
-3. **VPS:** limited user (root nahi), SSH key login.
-   ```bash
-   # Node 20+, Nginx, PM2, certbot
-   git clone ... /var/www/deephysio   # ya SFTP se upload (node_modules ke bina)
-   cd /var/www/deephysio && npm ci && npm run build
-   cp .env.example .env && nano .env   # NODE_ENV=production, COOKIE_SECURE=true, TRUST_PROXY=true,
-                                        # SERVE_CLIENT=true, CLIENT_ORIGINS=https://deephysio.co.uk,https://www.deephysio.co.uk
-   npm run seed
-   pm2 start deploy/ecosystem.config.cjs && pm2 save && pm2 startup
-   sudo cp deploy/nginx.conf /etc/nginx/sites-available/deephysio && sudo ln -s ... && sudo certbot --nginx
-   ```
-4. **Email:** Brevo / SendGrid / Fasthosts mailbox ke SMTP details `.env` mein; domain DNS mein **SPF + DKIM** (+ DMARC) records.
-5. **Backup:** `server/scripts/backup.sh` (mongodump + uploads, 14 din) - cron roz raat 2 baje. **Live karne se pehle purani site ka full backup** (PDF).
-6. **Check:** https par mixed content nahi, staging ke URLs nahi (saare URLs relative / `.env` se).
-7. Update: `git pull && npm ci && npm run build && pm2 restart deephysio`.
 
 ## 5. Client / HR se chahiye
 Written approval (MERN) · VPS + limited SSH user · MongoDB Atlas (client account) · DNS access (SSL, staging, SPF/DKIM) ·
@@ -100,7 +68,8 @@ handover (cheat-sheet, video, live session, 30-din warranty) ki dates.
 
 ---
 
-## Changelog
+
+## Changelog\n\n## v13: frontend/ aur backend/ alag folders\n- Code wahi, sirf alag folders. Backend ke paas roles + starting content ki apni copy (`backend/lib/permissions.js`, `backend/data/`).\n- `npm run reset-admin` jod diya. Frontend local par `.env.development` se apne aap backend se judta hai.\n
 
 ## v12: Phone numbers General Settings mein
 - Admin → **General Settings → Phone & WhatsApp**: Phone number (as displayed), Phone for click-to-call, WhatsApp number - teeno ek jagah.
@@ -267,3 +236,4 @@ src/
 1. `src/api/endpoints.js` ke top par likhe routes Express mein banao
 2. `.env` mein `VITE_USE_MOCK=false`
 3. Backend port 5000 par - `vite.config.js` ka proxy `/api` wahan bhejega
+

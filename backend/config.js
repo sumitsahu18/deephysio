@@ -37,6 +37,7 @@ const schema = z.object({
 
   // Production mein Express hi built website (dist/) bhi serve kare
   SERVE_CLIENT: bool('false'),
+  CLIENT_DIST: z.string().default('../frontend/dist'), // built website ka folder (SERVE_CLIENT=true par)
 
   // Brute-force / spam se bachav (production defaults theek hain)
   LOGIN_RATE_LIMIT: z.coerce.number().int().min(1).default(10), // har IP, 15 min mein
@@ -57,6 +58,7 @@ export const config = {
   isProd: env.NODE_ENV === 'production',
   origins: env.CLIENT_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean),
   uploadDir: path.resolve(env.UPLOAD_DIR),
+  clientDist: path.resolve(env.CLIENT_DIST),
   maxUploadBytes: env.MAX_UPLOAD_MB * 1024 * 1024,
 }
 

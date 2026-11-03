@@ -51,8 +51,8 @@ export function createApp() {
     next()
   }, api)
 
-  // Production: built website (npm run build -> dist/) bhi yahi server de
-  const dist = path.resolve('dist')
+  // Production: built website (frontend: npm run build -> frontend/dist) bhi yahi server de
+  const dist = config.clientDist
   if (config.SERVE_CLIENT && fs.existsSync(dist)) {
     app.use(express.static(dist, { index: false, maxAge: '7d' }))
     app.get('/{*splat}', (req, res, next) => (req.path.startsWith('/uploads') ? next() : res.sendFile(path.join(dist, 'index.html'))))

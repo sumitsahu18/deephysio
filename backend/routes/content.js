@@ -4,7 +4,7 @@ import Setting from '../models/Setting.js'
 import { Service, TeamMember, Faq, Testimonial } from '../models/content.js'
 import { siteSchema, clinicSchema, pagesSchema, checkPageImages, serviceSchema, teamSchema, faqSchema, testimonialSchema } from '../lib/schemas.js'
 import { requireAuth, requirePerm } from '../middleware/auth.js'
-import { hasPermission, PAGE_PERMISSION } from '../../src/lib/permissions.js'
+import { hasPermission, PAGE_PERMISSION } from '../lib/permissions.js'
 import { asyncH, HttpError } from '../middleware/errors.js'
 
 const r = Router()

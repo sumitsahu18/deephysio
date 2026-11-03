@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { ROLES } from '../../src/lib/permissions.js'
+import { ROLES } from '../lib/permissions.js'
 
 // Admin / Staff login. Password sirf bcrypt hash ke roop mein save hota hai.
 const userSchema = new mongoose.Schema(

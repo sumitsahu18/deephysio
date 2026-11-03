@@ -10,7 +10,7 @@ import { password as passwordRule } from '../lib/schemas.js'
 import User from '../models/User.js'
 import Setting from '../models/Setting.js'
 import { Service, TeamMember, Faq, Testimonial } from '../models/content.js'
-import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedFaqs, seedTestimonials } from '../../src/data/seed.js'
+import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedFaqs, seedTestimonials } from '../data/seed.js'
 
 const reset = process.argv.includes('--reset')
 const strip = (list) => list.map(({ _id, ...rest }) => rest)

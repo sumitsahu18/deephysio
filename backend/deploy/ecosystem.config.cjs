@@ -1,10 +1,10 @@
 // PM2: server ko hamesha chalu rakhta hai, crash par restart, reboot par start.
-//   pm2 start deploy/ecosystem.config.cjs && pm2 save && pm2 startup
+//   (backend folder mein) pm2 start deploy/ecosystem.config.cjs && pm2 save && pm2 startup
 module.exports = {
   apps: [
     {
       name: 'deephysio',
-      script: 'server/index.js',
+      script: 'index.js',
       cwd: __dirname + '/..',
       instances: 1,
       env: { NODE_ENV: 'production' },

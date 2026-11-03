@@ -1,0 +1,11 @@
+node_modules
+dist
+uploads
+logs
+*.log
+.DS_Store
+# secrets
+.env
+.env.*
+!.env.example
+!.env.development

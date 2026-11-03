@@ -1,6 +1,6 @@
 // Har API input ka validation (zod). Jo field yahan nahi hai wo apne aap hat jati hai (mass-assignment se bachav).
 import { z } from 'zod'
-import { ROLES } from '../../src/lib/permissions.js'
+import { ROLES } from './permissions.js'
 
 const text = (max = 500) => z.string().trim().max(max)
 const reqText = (max = 500, label = 'This field') => z.string().trim().min(1, `${label} is required`).max(max)
