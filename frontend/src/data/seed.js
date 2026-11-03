@@ -8,13 +8,13 @@ import { IMAGES } from './images.js'
 
 // Default glass theme (index.css ke @theme jaisa hi). Theme Settings mein "Reset" isi par le jata hai.
 export const DEFAULT_THEME = {
-  primary: '#2dd4bf', // highlights, links, glow
-  secondary: '#8b5cf6', // gradients
-  accent: '#f2706b', // warm gradient cards
-  background: '#072e37',
-  button: '#ffffff',
-  buttonText: '#072e37',
-  text: '#ffffff',
+  primary: '#0369a1', // links, small headings, icons
+  secondary: '#e0f2fe', // Soft Sky - panels / gradients
+  accent: '#fde047', // Light Yellow - yellow cards
+  background: '#fafbfb', // Off-White
+  button: '#fde047', // Light Yellow buttons
+  buttonText: '#1e293b', // Deep Slate
+  text: '#1e293b', // Deep Slate
 }
 
 // ---------------------------------------------------------------------------

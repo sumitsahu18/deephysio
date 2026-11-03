@@ -14,7 +14,7 @@ function Mark({ className = '', light = false }) {
       {dots.map((d, i) => (
         <circle key={i} cx={d.x} cy={d.y} r={d.s} fill={i % 3 ? '#336c9b' : '#1fa3c6'} opacity={d.o} />
       ))}
-      <path d="M24 20v24h6a12 12 0 0 0 0-24z" fill="none" stroke={light ? '#ffffff' : '#1b4467'} strokeWidth="4" strokeLinejoin="round" />
+      <path d="M24 20v24h6a12 12 0 0 0 0-24z" fill="none" style={{ stroke: light ? 'var(--color-text)' : '#1b4467' }} strokeWidth="4" strokeLinejoin="round" />
     </svg>
   )
 }

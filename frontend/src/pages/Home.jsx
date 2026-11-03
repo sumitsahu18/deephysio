@@ -119,7 +119,7 @@ function InfoCards({ p, settings }) {
           <h2 className="flex items-center gap-2 font-glass text-xl font-semibold">
             <Clock className="size-5 text-aqua-300" /> Opening Hours
           </h2>
-          <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${open ? 'bg-emerald-400/20 text-emerald-200' : 'bg-white/10 text-white/70'}`}>
+          <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${open ? 'bg-emerald-100 text-emerald-800' : 'bg-white/10 text-white/70'}`}>
             {open ? 'OPEN NOW' : 'CLOSED NOW'}
           </span>
         </div>
@@ -243,7 +243,7 @@ function Testimonials({ p }) {
                 {t.rating > 0 && (
                   <p className="mt-0.5 flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
                     {Array.from({ length: 5 }, (_, k) => (
-                      <Star key={k} className={`size-4 ${k < t.rating ? 'fill-amber-300 text-amber-300' : 'text-white/30'}`} />
+                      <Star key={k} className={`size-4 ${k < t.rating ? 'fill-amber-400 text-amber-500' : 'text-white/30'}`} />
                     ))}
                   </p>
                 )}

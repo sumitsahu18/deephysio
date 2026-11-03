@@ -13,8 +13,19 @@ const THEME_VARS = {
   text: '--color-text',
 }
 
+// Purana dark theme (jo pehle default tha) database / browser mein save ho to naya light theme lagao.
+// Admin ne khud jo custom rang chune hain wo waise hi rehte hain.
+const OLD_DARK_DEFAULT = { background: '#072e37', text: '#ffffff' }
+export function normalizeTheme(theme) {
+  const t = theme || {}
+  const isOldDark =
+    String(t.background || '').toLowerCase() === OLD_DARK_DEFAULT.background &&
+    String(t.text || '').toLowerCase() === OLD_DARK_DEFAULT.text
+  return isOldDark ? { ...DEFAULT_THEME } : { ...DEFAULT_THEME, ...t }
+}
+
 export function applyTheme(theme, el = document.documentElement) {
-  const t = { ...DEFAULT_THEME, ...(theme || {}) }
+  const t = normalizeTheme(theme)
   Object.entries(THEME_VARS).forEach(([k, v]) => {
     if (/^#[0-9a-f]{3,8}$/i.test(t[k] || '')) el.style.setProperty(v, t[k])
   })

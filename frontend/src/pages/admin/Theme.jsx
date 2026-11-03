@@ -1,30 +1,30 @@
 import { useEffect, useState } from 'react'
 import { RotateCcw, CalendarCheck, ArrowUpRight } from 'lucide-react'
 import { siteApi, getErrorMessage } from '../../api/endpoints'
-import { useSite, applyTheme } from '../../context/SiteContext'
+import { useSite, applyTheme, normalizeTheme } from '../../context/SiteContext'
 import { DEFAULT_THEME } from '../../data/seed'
 import { SaveBar } from '../../components/DocForm'
 
 // Theme Settings (sirf Admin). Har colour ek CSS variable hai - save karte hi poori website par lag jata hai.
 const FIELDS = [
-  { key: 'primary', label: 'Primary colour', help: 'Highlights, links, small headings and the glow around cards.' },
-  { key: 'secondary', label: 'Secondary colour', help: 'Used in the coloured gradients (with the primary colour).' },
-  { key: 'accent', label: 'Accent colour', help: 'Warm gradient cards, e.g. the coral service card.' },
+  { key: 'primary', label: 'Primary colour', help: 'Links, small headings and icons.' },
+  { key: 'secondary', label: 'Secondary colour', help: 'Soft panels behind photos and the light coloured cards.' },
+  { key: 'accent', label: 'Accent colour', help: 'Highlight cards, e.g. the yellow service card.' },
   { key: 'button', label: 'Button colour', help: 'Main buttons like “Book Appointment”.' },
   { key: 'buttonText', label: 'Button text colour', help: 'Text on the main buttons.' },
-  { key: 'background', label: 'Background colour', help: 'The base colour behind the glass.' },
-  { key: 'text', label: 'Text colour', help: 'Main text on the website. Keep it light if the background is dark.' },
+  { key: 'background', label: 'Background colour', help: 'The page background colour.' },
+  { key: 'text', label: 'Text colour', help: 'Main text on the website. Keep it dark on a light background.' },
 ]
 const HEX = /^#([0-9a-f]{6})$/i
 
 export default function Theme() {
   const { site, setSite } = useSite()
-  const [form, setForm] = useState({ ...DEFAULT_THEME, ...(site.theme || {}) })
+  const [form, setForm] = useState(normalizeTheme(site.theme))
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState({})
 
   useEffect(() => {
-    setForm({ ...DEFAULT_THEME, ...(site.theme || {}) })
+    setForm(normalizeTheme(site.theme))
   }, [site.theme])
 
   // Bina save kiye page chhoda to saved theme wapas
@@ -39,7 +39,7 @@ export default function Theme() {
   async function save(e) {
     e.preventDefault()
     const bad = FIELDS.find((f) => !HEX.test(form[f.key] || ''))
-    if (bad) return setMsg({ type: 'err', text: `${bad.label}: use a colour like #2dd4bf` })
+    if (bad) return setMsg({ type: 'err', text: `${bad.label}: use a colour like #fde047` })
     setSaving(true)
     setMsg({})
     try {

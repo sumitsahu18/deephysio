@@ -35,7 +35,7 @@ export default function FloatingActions() {
           rel="noreferrer"
           aria-label={`Chat with us on WhatsApp ${formatWhatsapp(settings.whatsapp)}`}
           title={`WhatsApp ${formatWhatsapp(settings.whatsapp)}`}
-          className="pulse grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors duration-300 hover:bg-[#1ebe5a]"
+          className="pulse grid size-14 place-items-center rounded-full bg-[#25D366] text-[#ffffff] shadow-lg transition-colors duration-300 hover:bg-[#1ebe5a]"
         >
           <WhatsAppIcon className="size-7" />
         </a>
