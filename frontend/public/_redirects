@@ -1,0 +1,3 @@
+/api/*      https://deephysio-new-backend-production.up.railway.app/api/:splat      200
+/uploads/*  https://deephysio-new-backend-production.up.railway.app/uploads/:splat  200
+/*          /index.html                                                             200
