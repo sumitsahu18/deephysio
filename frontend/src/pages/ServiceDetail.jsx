@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { Check, CalendarCheck, Phone, ArrowRight } from 'lucide-react'
+import { Check, CalendarCheck, Phone, ArrowRight, ShieldCheck } from 'lucide-react'
 import { servicesApi } from '../api/endpoints'
 import { useSite } from '../context/SiteContext'
 import useFetch from '../hooks/useFetch'
@@ -31,6 +31,16 @@ export default function ServiceDetail() {
 
       <section className="shell mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
+          {s.provider && (
+            <Reveal className="flex items-center gap-3 rounded-2xl border border-pine-200 bg-pine-50/90 p-4 shadow-xs">
+              <ShieldCheck className="size-5 shrink-0 text-pine-700" />
+              <div>
+                <p className="text-xs uppercase font-bold tracking-wider text-pine-600">Qualified Practitioner</p>
+                <p className="text-sm font-semibold text-pine-900">{s.provider}</p>
+              </div>
+            </Reveal>
+          )}
+
           <Reveal className="glass rounded-3xl p-5 min-[400px]:p-6 sm:p-9">
             <h2 className="font-glass text-2xl font-semibold">What it involves</h2>
             <div className="mt-4 space-y-4 text-[17px] leading-relaxed text-white/80">
@@ -57,7 +67,7 @@ export default function ServiceDetail() {
             <CalendarCheck className="size-9 text-white" />
             <h3 className="mt-4 font-glass text-2xl font-semibold">Book an appointment</h3>
             <p className="mt-2 text-white/90">Send us an enquiry or give us a call and we will arrange a time that suits you.</p>
-            <Link to="/contact#enquiry" className="btn-white mt-6 w-full">Book / Enquire</Link>
+            <Link to={`/contact?reason=${encodeURIComponent(s.title)}#enquiry`} className="btn-white mt-6 w-full">Book / Enquire</Link>
             <a href={`tel:${settings.phoneHref}`} className="btn-glass mt-3 w-full">
               <Phone className="size-4" /> {settings.phone}
             </a>

@@ -4,7 +4,18 @@ import PageContent from './PageContent'
 import Enquiries from './Enquiries'
 import ClinicDetails from './ClinicDetails'
 import SiteSettings from './SiteSettings'
-import { AdminServices, AdminTeam, AdminFaqs, AdminTestimonials, AdminUsers } from './ContentPages'
+import {
+  AdminServices,
+  AdminTeam,
+  AdminFaqs,
+  AdminTestimonials,
+  AdminUsers,
+  AdminAccreditations,
+  AdminTrustBadges,
+  AdminPricing,
+  AdminInsurers,
+  AdminLocations,
+} from './ContentPages'
 
 // ONE admin dashboard: har sidebar item ek "section" hai, andar simple tabs.
 // Tab URL mein (?tab=...) rehta hai, taaki refresh / link par wahi tab khule.
@@ -49,13 +60,28 @@ export function HomepageSection() {
   return (
     <Section
       title="Homepage & Pages"
-      intro="Hero text, conditions treated, buttons, photos and the other page texts."
+      intro="Hero text, trust & accreditations, testimonials, FAQ and other page texts."
       tabs={[
         { key: 'home', label: 'Homepage', el: <PageContent page="home" /> },
+        { key: 'accreditations', label: 'Accreditations', el: <AdminAccreditations /> },
+        { key: 'trust', label: 'Trust Badges / USPs', el: <AdminTrustBadges /> },
         { key: 'testimonials', label: 'Testimonials', el: <AdminTestimonials /> },
         { key: 'faq', label: 'FAQ', el: <AdminFaqs /> },
         { key: 'faq-page', label: 'FAQ page text', el: <PageContent page="faq" /> },
         { key: 'privacy', label: 'Privacy Policy', el: <PageContent page="privacy" /> },
+      ]}
+    />
+  )
+}
+
+export function TrustSectionAdmin() {
+  return (
+    <Section
+      title="Trust & Accreditations"
+      intro="Manage professional registrations (HCPC, CSP, AACP) and micro-trust statements (24h appointments, self-referral, free parking)."
+      tabs={[
+        { key: 'accreditations', label: 'Accreditations (HCPC, CSP, AACP)', el: <AdminAccreditations /> },
+        { key: 'trust', label: 'Micro-Trust Badges / USPs', el: <AdminTrustBadges /> },
       ]}
     />
   )
@@ -77,11 +103,39 @@ export function AboutSection() {
 export function ServicesSection() {
   return (
     <Section
-      title="Services"
-      intro="Add, edit or remove treatments. Describe the care - avoid promising cures or guaranteed results."
+      title="Services & Treatments"
+      intro="Add, edit or remove treatments, session pricing, private medical insurers, and clinic policies."
       tabs={[
         { key: 'list', label: 'Services', el: <AdminServices /> },
-        { key: 'page', label: 'Services page text', el: <PageContent page="services" /> },
+        { key: 'pricing', label: 'Pricing & Fees', el: <AdminPricing /> },
+        { key: 'insurers', label: 'Private Medical Insurers', el: <AdminInsurers /> },
+        { key: 'page', label: 'Services & Policy Texts', el: <PageContent page="services" /> },
+      ]}
+    />
+  )
+}
+
+export function PricingSectionAdmin() {
+  return (
+    <Section
+      title="Pricing, Insurers & Policies"
+      intro="Manage treatment fees, appointment durations, private medical insurers, and payment / cancellation policies."
+      tabs={[
+        { key: 'pricing', label: 'Pricing Plans', el: <AdminPricing /> },
+        { key: 'insurers', label: 'Private Medical Insurers', el: <AdminInsurers /> },
+        { key: 'policies', label: 'Payment & Cancellation Policies', el: <PageContent page="services" /> },
+      ]}
+    />
+  )
+}
+
+export function LocationsSectionAdmin() {
+  return (
+    <Section
+      title="Clinic Locations"
+      intro="Manage practice locations and clinic branches. Active locations appear on the Contact page and Footer with their address, contact details, opening hours, directions links, and interactive Google maps."
+      tabs={[
+        { key: 'locations', label: 'Practice Locations', el: <AdminLocations /> },
       ]}
     />
   )
@@ -90,9 +144,10 @@ export function ServicesSection() {
 export function ContactSection() {
   return (
     <Section
-      title="Contact & Enquiries"
-      intro="Website enquiries, email, address, opening hours and Google Map."
+      title="Contact, Locations & Enquiries"
+      intro="Manage clinic locations, website enquiries, contact details, opening hours and Google Map."
       tabs={[
+        { key: 'locations', label: 'Clinic Locations', el: <AdminLocations /> },
         { key: 'enquiries', label: 'Enquiries', el: <Enquiries /> },
         { key: 'details', label: 'Contact details & hours', el: <ClinicDetails /> },
         { key: 'page', label: 'Contact page text', el: <PageContent page="contact" /> },

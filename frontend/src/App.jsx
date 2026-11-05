@@ -21,8 +21,11 @@ const Theme = lazy(() => import('./pages/admin/Theme'))
 const Account = lazy(() => import('./pages/admin/Account'))
 const section = (name) => lazy(() => import('./pages/admin/Sections').then((m) => ({ default: m[name] })))
 const HomepageSection = section('HomepageSection')
+const TrustSectionAdmin = section('TrustSectionAdmin')
 const AboutSection = section('AboutSection')
 const ServicesSection = section('ServicesSection')
+const PricingSectionAdmin = section('PricingSectionAdmin')
+const LocationsSectionAdmin = section('LocationsSectionAdmin')
 const ContactSection = section('ContactSection')
 const GeneralSection = section('GeneralSection')
 
@@ -49,8 +52,11 @@ export default function App() {
         <Route path="/admin" element={guard(null, <AdminLayout />)}>
           <Route index element={<Dashboard />} />
           <Route path="homepage" element={guard('homepage', <HomepageSection />)} />
+          <Route path="trust" element={guard('homepage', <TrustSectionAdmin />)} />
           <Route path="about" element={guard('about', <AboutSection />)} />
           <Route path="services" element={guard('services', <ServicesSection />)} />
+          <Route path="pricing" element={guard('services', <PricingSectionAdmin />)} />
+          <Route path="locations" element={guard('contact', <LocationsSectionAdmin />)} />
           <Route path="contact" element={guard('contact', <ContactSection />)} />
           <Route path="media" element={guard('media', <Media />)} />
           <Route path="theme" element={guard('theme', <Theme />)} />

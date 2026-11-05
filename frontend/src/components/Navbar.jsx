@@ -99,6 +99,11 @@ export default function Navbar() {
                         </Link>
                       </li>
                     ))}
+                    <li className="border-t border-white/10 pt-1 mt-1">
+                      <Link to="/services#pricing" className="block rounded-xl px-4 py-2 text-xs font-semibold text-aqua-300 transition-colors hover:bg-white/10 hover:text-white">
+                        Treatment Fees & Pricing →
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -163,6 +168,9 @@ export default function Navbar() {
                             <Link to={`/services/${s.slug}`} className="block rounded-xl px-3 py-2.5 text-sm text-white/70">{s.title}</Link>
                           </li>
                         ))}
+                        <li className="pt-1">
+                          <Link to="/services#pricing" className="block rounded-xl px-3 py-2 text-xs font-semibold text-aqua-300">Treatment Fees & Pricing →</Link>
+                        </li>
                       </ul>
                     )}
                   </>

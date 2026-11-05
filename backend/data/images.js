@@ -6,6 +6,7 @@ export const IMAGES = {
   hero: u('1649751361457-01d3a696c7e6', 2200), // leg examination
   band: u('1519824145371-296894a0daa9', 2000),
   clinic: u('1576091160550-2173dba999ef', 2000), // poori website ke peeche (glass ke through dikhta hai) - Admin > Page content > Home se badlo
+  testimonials: u('1576091160399-112ba8d25d1d', 2000), // clinic rehabilitation space for testimonials
   about: u('1645005512968-0c1fe99f0093', 1400), // shoulder treatment
   homeVisits: u('1773227055624-07b515ba87c5', 1400), // caregiver with elderly patient
   aboutHeader: u('1706353399656-210cca727a33', 2000),
@@ -18,6 +19,7 @@ export const IMAGES = {
     'exercise-therapy': u('1645005513713-9e2b92a687d3', 900),
     traction: u('1758063800058-473d9071937a', 900),
     'biomechanical-assessment': u('1522898467493-49726bf28798', 900),
+    acupuncture: u('1512290900672-1b6c00d46d51', 900),
   },
 }
 

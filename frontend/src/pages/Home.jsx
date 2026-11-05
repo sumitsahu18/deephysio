@@ -8,8 +8,9 @@ import ServiceCard from '../components/ServiceCard'
 import SectionTitle from '../components/SectionTitle'
 import Spinner from '../components/Spinner'
 import { WhatsAppIcon, whatsappLink, formatWhatsapp } from '../components/SocialIcons'
-import { onImgError } from '../data/images'
+import { IMAGES, onImgError } from '../data/images'
 import { todayName, isOpenNow } from '../utils/hours'
+import TrustSection from '../components/TrustSection'
 
 // HOMEPAGE - Fluid Glassmorphism (HR ka Style 2)
 // PDF 2.2 (1): hero mein conditions treated, practitioner credentials, Book / Enquire CTAs.
@@ -18,14 +19,14 @@ import { todayName, isOpenNow } from '../utils/hours'
 function Hero({ p, settings }) {
   return (
     <section className="shell pt-2">
-      <div className="relative isolate overflow-hidden rounded-3xl border border-white/10">
+      <div className="relative isolate overflow-hidden rounded-3xl border border-white/20 shadow-lg">
         {p.heroImage && (
           <img src={p.heroImage} alt="" onError={onImgError} fetchPriority="high" className="hero-zoom absolute inset-0 -z-20 size-full object-cover object-center" />
         )}
-        <div className="absolute inset-0 -z-10 photo-fade" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/85 via-slate-900/50 to-slate-900/20" />
 
         <div className="flex min-h-[520px] items-center p-2.5 min-[400px]:p-4 sm:min-h-[560px] sm:p-8 lg:min-h-[600px] lg:p-12">
-          <div className="glass relative isolate w-full max-w-2xl overflow-hidden rounded-[1.25rem] p-5 min-[400px]:p-6 sm:rounded-3xl sm:p-10">
+          <div className="glass relative isolate w-full max-w-2xl overflow-hidden rounded-[1.25rem] p-5 min-[400px]:p-6 sm:rounded-3xl sm:p-10 shadow-2xl border border-white/40">
             <div className="inner-glow" />
             <p className="anim-fade-down eyebrow-glass">{p.welcome} {settings.clinicName}</p>
             <h1 className="anim-fade-up mt-3 font-glass text-[clamp(1.55rem,8vw,2.1rem)] leading-[1.05] font-bold tracking-tight uppercase [overflow-wrap:anywhere] hyphens-auto [animation-delay:120ms] sm:text-5xl lg:text-[3.4rem]">
@@ -172,13 +173,13 @@ function Services({ p }) {
 
 function Band({ p }) {
   return (
-    <section className="shell mt-16">
-      <Reveal anim="zoom" className="relative isolate overflow-hidden rounded-3xl border border-white/15">
+    <section className="shell mt-16 dark-photo-section">
+      <Reveal anim="zoom" className="relative isolate overflow-hidden rounded-3xl border border-white/20 shadow-xl">
         {p.bandImage && <img src={p.bandImage} alt="" onError={onImgError} loading="lazy" className="absolute inset-0 -z-20 size-full object-cover" />}
-        <div className="grad-aurora absolute inset-0 -z-10 opacity-80" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-900/60" />
         <div className="flex flex-col items-start gap-6 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
-            <h2 className="font-glass text-3xl font-bold tracking-tight uppercase sm:text-4xl">{p.bandTitle}</h2>
+            <h2 className="font-glass text-3xl font-bold tracking-tight uppercase text-white sm:text-4xl">{p.bandTitle}</h2>
             <p className="mt-3 text-lg text-white/90">{p.bandText}</p>
           </div>
           <Link to="/contact#enquiry" className="btn-white shrink-0 px-8 py-4 text-base">
@@ -226,33 +227,54 @@ function Testimonials({ p }) {
   const list = [...(data || [])].sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
   if (!list.length) return null // koi review nahi -> section chhupa do
   return (
-    <section className="shell mt-16">
-      <SectionTitle eyebrow="Kind words" title={p.testimonialsTitle || 'Patient Testimonials'} />
-      <div className={`mt-7 grid gap-5 ${list.length > 1 ? 'md:grid-cols-2' : ''}`}>
-        {list.map((t, i) => (
-          <Reveal key={t._id} delay={(i % 2) * 120} className="glass glow-hover relative isolate overflow-hidden rounded-3xl p-5 min-[400px]:p-6 sm:p-8">
-            <div className="inner-glow opacity-70" />
-            <Quote className="absolute top-6 right-6 size-10 text-white/15" />
-            <div className="flex items-start gap-4">
-              <span className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-white/40 bg-white/15 font-glass text-lg font-semibold">
-                {initials(t.name)}
-                {t.photo && <img src={t.photo} alt="" onError={onImgError} className="absolute inset-0 size-full object-cover" />}
-              </span>
-              <div className="min-w-0">
-                <p className="font-glass text-lg font-semibold">{t.name}</p>
-                {t.rating > 0 && (
-                  <p className="mt-0.5 flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
-                    {Array.from({ length: 5 }, (_, k) => (
-                      <Star key={k} className={`size-4 ${k < t.rating ? 'fill-amber-400 text-amber-500' : 'text-white/30'}`} />
-                    ))}
-                  </p>
-                )}
+    <section className="shell mt-16 dark-photo-section">
+      <div className="relative isolate overflow-hidden rounded-3xl border border-slate-700/50 p-6 sm:p-10 lg:p-12 shadow-xl">
+        <img
+          src={IMAGES.testimonials}
+          alt=""
+          onError={onImgError}
+          loading="lazy"
+          className="absolute inset-0 -z-20 size-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-slate-950/90 via-slate-900/85 to-slate-950/95" />
+
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow-glass inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-950/60 px-3.5 py-1 text-xs font-semibold text-sky-300">
+            Kind Words
+          </span>
+          <h2 className="mt-3 font-glass text-2xl font-bold tracking-tight text-white uppercase sm:text-3xl lg:text-4xl">
+            {p.testimonialsTitle || 'Patient Testimonials'}
+          </h2>
+          <p className="mt-2 text-sm text-slate-300">
+            Real feedback from patients who entrusted their recovery to DeePhysio.
+          </p>
+        </div>
+
+        <div className={`mt-8 grid gap-5 ${list.length > 1 ? 'md:grid-cols-2' : ''}`}>
+          {list.map((t, i) => (
+            <Reveal key={t._id} delay={(i % 2) * 120} className="relative isolate overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-white/15 shadow-lg sm:p-8">
+              <Quote className="absolute top-6 right-6 size-10 text-white/10" />
+              <div className="flex items-start gap-4">
+                <span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-white/30 bg-white/10 font-glass text-base font-semibold text-white">
+                  {initials(t.name)}
+                  {t.photo && <img src={t.photo} alt="" onError={onImgError} className="absolute inset-0 size-full object-cover" />}
+                </span>
+                <div className="min-w-0">
+                  <p className="font-glass text-base font-semibold text-white">{t.name}</p>
+                  {t.rating > 0 && (
+                    <p className="mt-0.5 flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
+                      {Array.from({ length: 5 }, (_, k) => (
+                        <Star key={k} className={`size-4 ${k < t.rating ? 'fill-amber-400 text-amber-400' : 'text-white/20'}`} />
+                      ))}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-            <blockquote className="mt-4 leading-relaxed text-white/85">“{t.text}”</blockquote>
-            {t.source && <p className="mt-4 text-xs font-medium tracking-wide text-white/50 uppercase">{t.source}</p>}
-          </Reveal>
-        ))}
+              <blockquote className="mt-4 leading-relaxed text-slate-200">“{t.text}”</blockquote>
+              {t.source && <p className="mt-4 text-xs font-medium tracking-wide text-sky-300/80 uppercase">{t.source}</p>}
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -264,6 +286,7 @@ export default function Home() {
   return (
     <>
       <Hero p={p} settings={settings} />
+      <TrustSection />
       <InfoCards p={p} settings={settings} />
       <Services p={p} />
       <Band p={p} />

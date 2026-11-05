@@ -118,6 +118,8 @@ export default function SiteSettings() {
         <h2 className="text-lg font-semibold sm:col-span-2">Social media</h2>
         {input('facebookUrl', 'Facebook page link')}
         {input('instagramUrl', 'Instagram link')}
+        {input('youtubeUrl', 'YouTube channel link')}
+        {input('twitterUrl', 'Twitter / X profile link')}
         <p className="text-xs text-muted sm:col-span-2">Leave a field empty to hide that icon on the website.</p>
       </section>
     </form>

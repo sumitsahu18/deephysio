@@ -115,6 +115,29 @@ const SCHEMA = {
           { key: 'disclaimer', label: 'Note shown under the services', type: 'textarea', rows: 3 },
         ],
       },
+      {
+        title: 'Private Medical Insurance & Pre-authorisation',
+        fields: [
+          { key: 'insuranceTitle', label: 'Insurance Heading', wide: false },
+          { key: 'insuranceText', label: 'Insurance Overview Text', type: 'textarea', rows: 3 },
+          { key: 'insurancePreAuth', label: 'Pre-authorisation Instructions', type: 'textarea', rows: 3 },
+        ],
+      },
+      {
+        title: 'Payment Methods & Instructions',
+        fields: [
+          { key: 'paymentTitle', label: 'Payment Heading', wide: false },
+          { key: 'paymentMethods', label: 'Accepted Payment Methods (one per line)', type: 'list', rows: 3 },
+          { key: 'paymentInstructions', label: 'Payment Instructions', type: 'textarea', rows: 3 },
+        ],
+      },
+      {
+        title: 'Cancellation & Rescheduling Policy',
+        fields: [
+          { key: 'cancellationTitle', label: 'Cancellation Heading', wide: false },
+          { key: 'cancellationPolicy', label: 'Cancellation & Rescheduling Policy Text (exact policy statement)', type: 'textarea', rows: 3 },
+        ],
+      },
     ],
   },
   contact: {

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus, Pencil, Trash2, X, Save, LoaderCircle } from 'lucide-react'
 import { getErrorMessage } from '../api/endpoints'
 import { useAuth } from '../context/AuthContext'
+import { useSite } from '../context/SiteContext'
 import useFetch from '../hooks/useFetch'
 import Spinner from './Spinner'
 import MediaInput from './MediaInput'
@@ -35,6 +36,7 @@ function fromForm(fields, form) {
 
 export default function CrudPage({ title, intro, api, fields, columns, sortBy, newLabel = 'Add new' }) {
   const { can } = useAuth()
+  const { refresh } = useSite() || {}
   const { data, setData, loading, error } = useFetch(api.list)
   const [editing, setEditing] = useState(null) // null | 'new' | item
   const [form, setForm] = useState({})
@@ -61,6 +63,7 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
         const updated = await api.update(editing._id, body)
         setData((list) => list.map((x) => (x._id === editing._id ? updated : x)))
       }
+      refresh?.()
       setEditing(null)
     } catch (err) {
       setMsg(getErrorMessage(err))
@@ -74,6 +77,7 @@ export default function CrudPage({ title, intro, api, fields, columns, sortBy, n
     try {
       await api.remove(item._id)
       setData((list) => list.filter((x) => x._id !== item._id))
+      refresh?.()
     } catch (err) {
       setMsg(getErrorMessage(err))
     }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ShieldCheck } from 'lucide-react'
 import Icon from './Icon'
 import Reveal from './Reveal'
 import { onImgError } from '../data/images'
@@ -37,7 +37,31 @@ export default function ServiceCard({ service, tone = 'glass', variant = 'compac
             </span>
           )}
           <h3 className={`${variant === 'compact' ? 'mt-5' : ''} font-glass text-xl font-semibold text-white`}>{service.title}</h3>
+          
+          {service.provider && (
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-medium text-white/90">
+              <ShieldCheck className="size-3.5 shrink-0 text-aqua-300" />
+              <span className="line-clamp-1">{service.provider}</span>
+            </div>
+          )}
+
           <p className={`mt-2 flex-1 text-[15px] leading-relaxed ${colored ? 'text-white/90' : 'text-white/70'}`}>{service.summary}</p>
+
+          {service.helpsWith?.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {service.helpsWith.slice(0, 3).map((h) => (
+                <span key={h} className="rounded-md border border-white/15 bg-white/10 px-2 py-0.5 text-[11px] text-white/80">
+                  {h}
+                </span>
+              ))}
+              {service.helpsWith.length > 3 && (
+                <span className="rounded-md border border-white/15 bg-white/10 px-2 py-0.5 text-[11px] text-white/60">
+                  +{service.helpsWith.length - 3} more
+                </span>
+              )}
+            </div>
+          )}
+
           <span
             className={`mt-5 inline-flex items-center gap-1.5 self-start rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
               colored ? 'bg-white text-deep group-hover:bg-white/90' : 'border border-white/25 bg-white/10 text-white group-hover:bg-white/20'

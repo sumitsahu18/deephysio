@@ -29,6 +29,8 @@ export const seedSite = {
   // Client ke order form se (PDF mein nahi): social icons + WhatsApp
   facebookUrl: 'https://facebook.com/',
   instagramUrl: 'https://instagram.com/',
+  youtubeUrl: '',
+  twitterUrl: '',
   whatsapp: '447737610615', // country code ke saath, bina + aur spaces ke. Khali = button hide
   footerText: 'Hands-on, HCPC-registered physiotherapy in Smethwick, Birmingham.',
   logoUrl: '', // Admin > General Settings > Logo. Khali = default logo
@@ -41,7 +43,7 @@ export const seedSite = {
 //    information must be easily manageable by our reception")
 // ---------------------------------------------------------------------------
 export const seedClinic = {
-  phone: '07737 610615',
+  phone: '077 3761 0615',
   phoneHref: '+447737610615',
   email: 'deephysioclinic@gmail.com',
   address: '7 Frank Road, Smethwick, Birmingham, B67 7NR',
@@ -125,6 +127,22 @@ export const seedPages = {
     headerImage: IMAGES.servicesHeader,
     disclaimer:
       'Treatment is tailored to each person and individual results vary. The information on this website is general and is not a substitute for an assessment by a qualified healthcare professional.',
+    insuranceTitle: 'Private Medical Insurance',
+    insuranceText:
+      'DeePhysio works with major private medical insurance providers, including Bupa, AXA Health, Aviva and Vitality.',
+    insurancePreAuth:
+      'Patients must obtain pre-authorisation from their insurance provider before booking if they want direct clinic billing. Patients should confirm their individual policy coverage before treatment.',
+    paymentTitle: 'Payment Information',
+    paymentMethods: [
+      'Cash accepted',
+      'Bank transfer accepted',
+      'Self-pay patients must pay after each session',
+    ],
+    paymentInstructions:
+      'We accept cash and direct bank transfer. Self-pay patients must pay after each session. Invoices and receipts are provided for all treatments.',
+    cancellationTitle: 'Cancellation & Rescheduling Policy',
+    cancellationPolicy:
+      "At least 24 hours' notice is required for cancellations or rescheduling. Late cancellations or changes may incur a fee.",
   },
   contact: {
     title: 'Contact & Booking Enquiry',
@@ -220,6 +238,27 @@ export const seedServices = [
     helpsWith: ['Recurring injuries', 'Walking and running discomfort', 'Posture concerns'],
     order: 6,
   },
+  {
+    _id: 's7',
+    slug: 'clinical-acupuncture-dry-needling',
+    title: 'Clinical Acupuncture & Dry Needling',
+    provider: 'Performed by an AACP-registered Chartered Physiotherapist.',
+    icon: 'Zap',
+    image: IMAGES.services.acupuncture,
+    summary:
+      'We integrate sterile, single-use clinical acupuncture into personalized rehabilitation plans to reduce localized inflammation, release tight myofascial bands, and trigger natural pain relief.',
+    body:
+      'We integrate sterile, single-use clinical acupuncture into personalized rehabilitation plans to reduce localized inflammation, release tight myofascial bands, and trigger natural pain relief.\n\nPerformed by an AACP-registered Chartered Physiotherapist, our clinical dry needling and acupuncture techniques provide targeted relief for muscular trigger points and chronic pain.\n\nSterile, single-use disposable needles are carefully applied following strict UK clinical standards to enhance your natural recovery.',
+    helpsWith: [
+      'Trigger point release',
+      'Sciatica',
+      'Tension headaches',
+      'Neck/back stiffness',
+      'Chronic joint pain',
+      'Acute muscle spasms',
+    ],
+    order: 7,
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -280,6 +319,158 @@ export const seedTestimonials = [
 
 // Media library (Admin > Media / Images). Upload ki hui images yahan list hoti hain.
 export const seedMedia = []
+
+// Accreditations & Professional Registrations (HCPC, CSP, AACP)
+export const seedAccreditations = [
+  {
+    _id: 'acc1',
+    name: 'HCPC',
+    fullName: 'Health & Care Professions Council',
+    description: 'UK statutory regulator protecting the public by regulating health and care professionals.',
+    logoUrl: '',
+    active: true,
+    order: 1,
+  },
+  {
+    _id: 'acc2',
+    name: 'CSP',
+    fullName: 'Chartered Society of Physiotherapy',
+    description: 'The professional, educational and trade union body for chartered physiotherapists in the UK.',
+    logoUrl: '',
+    active: true,
+    order: 2,
+  },
+  {
+    _id: 'acc3',
+    name: 'AACP',
+    fullName: 'Acupuncture Association of Chartered Physiotherapists',
+    description: 'UK professional association representing chartered physiotherapists practicing acupuncture.',
+    logoUrl: '',
+    active: true,
+    order: 3,
+  },
+]
+
+// Micro-Trust Badges / USPs (24h appointments, self-referral, free parking)
+export const seedTrustBadges = [
+  {
+    _id: 'tb1',
+    message: 'Appointments available within 24 hours',
+    icon: 'Clock',
+    active: true,
+    order: 1,
+  },
+  {
+    _id: 'tb2',
+    message: 'No GP referral necessary (self-referral welcome)',
+    icon: 'UserCheck',
+    active: true,
+    order: 2,
+  },
+  {
+    _id: 'tb3',
+    message: 'Free on-site / street parking',
+    icon: 'Car',
+    active: true,
+    order: 3,
+  },
+]
+
+// Dedicated Pricing & Session Breakdown (Exact client figures and travel radius)
+export const seedPricing = [
+  {
+    _id: 'p1',
+    name: 'Initial Assessment & Treatment',
+    duration: '45 minutes',
+    price: 50,
+    category: 'clinic',
+    notes: 'Full history, physical assessment, and first treatment plan.',
+    active: true,
+    order: 1,
+  },
+  {
+    _id: 'p2',
+    name: 'Follow-up Appointment',
+    duration: '30 minutes',
+    price: 45,
+    category: 'clinic',
+    notes: 'Progress review and hands-on therapy.',
+    active: true,
+    order: 2,
+  },
+  {
+    _id: 'p3',
+    name: 'Local Home Visit',
+    duration: '45 minutes',
+    price: 80,
+    category: 'home_visit',
+    notes: 'Up to a 10-mile radius from clinic.',
+    active: true,
+    order: 3,
+  },
+  {
+    _id: 'p4',
+    name: 'Extended Home Visit',
+    duration: '45 minutes',
+    price: 130,
+    category: 'home_visit',
+    notes: 'Over a 10-mile radius from clinic.',
+    active: true,
+    order: 4,
+  },
+]
+
+// Private Medical Insurance Providers (Bupa, AXA Health, Aviva, Vitality)
+export const seedInsurers = [
+  {
+    _id: 'ins1',
+    name: 'Bupa',
+    logoUrl: '',
+    notes: 'Direct billing available with pre-authorisation number.',
+    active: true,
+    order: 1,
+  },
+  {
+    _id: 'ins2',
+    name: 'AXA Health',
+    logoUrl: '',
+    notes: 'Pre-authorisation code required prior to treatment.',
+    active: true,
+    order: 2,
+  },
+  {
+    _id: 'ins3',
+    name: 'Aviva',
+    logoUrl: '',
+    notes: 'Direct settlement subject to policy excess & pre-authorisation.',
+    active: true,
+    order: 3,
+  },
+  {
+    _id: 'ins4',
+    name: 'Vitality',
+    logoUrl: '',
+    notes: 'Pre-approved physiotherapy treatments accepted.',
+    active: true,
+    order: 4,
+  },
+]
+
+export const seedLocations = [
+  {
+    _id: 'loc1',
+    name: 'DeePhysio Smethwick',
+    address: '7 Frank Road, Smethwick, Birmingham',
+    postcode: 'B67 7NR',
+    phone: '077 3761 0615',
+    email: 'deephysioclinic@gmail.com',
+    hours: 'Monday–Friday: 09:00–17:00\nSaturday: 09:00–15:00\nSunday: Closed',
+    mapUrl: 'https://www.google.com/maps?q=7+Frank+Road,+Smethwick,+Birmingham+B67+7NR&output=embed',
+    directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=7+Frank+Road,+Smethwick,+Birmingham+B67+7NR',
+    active: true,
+    order: 1,
+  },
+]
 
 export const seedEnquiries = []
 

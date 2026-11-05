@@ -20,18 +20,20 @@ export const mailEnabled = () => !!(transport && config.CLINIC_NOTIFICATION_EMAI
 export async function sendEnquiryEmail(e) {
   if (!mailEnabled()) return false
   const lines = [
-    'New enquiry from the website',
+    'New appointment booking enquiry from the website',
     '',
     `Name: ${e.name}`,
     `Email: ${e.email || '-'}`,
     `Phone: ${e.phone || '-'}`,
-    `Preferred contact time: ${e.preferredTime}`,
+    `Reason for Appointment: ${e.reason || 'General'}`,
+    `Preferred Date: ${e.preferredDate || 'Flexible'}`,
+    `Preferred Time: ${e.preferredTime || 'Any time'}`,
     '',
-    'Message:',
-    e.message,
+    'Message / Condition Details:',
+    e.message || '(None provided)',
     '',
     `Received: ${new Date(e.createdAt).toLocaleString('en-GB', { timeZone: 'Europe/London' })}`,
-    'View all enquiries in the website admin: Contact & Enquiries.',
+    'View and manage all booking enquiries in Admin: Contact & Enquiries.',
   ]
   await transport.sendMail({
     from: config.MAIL_FROM || config.SMTP_USER,

@@ -208,6 +208,24 @@
   color: var(--color-text);
 }
 
+/* Selected dark photographic sections (Hero, Band, Testimonials): ensure maximum readability on dark photography */
+.dark-photo-section {
+  --color-white: #ffffff;
+  color: #ffffff;
+}
+.dark-photo-section .eyebrow-glass {
+  color: #38bdf8;
+}
+.dark-photo-section .btn-glass {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.dark-photo-section .btn-glass:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
 /* Peeche ki chalti hui gradient "blobs" (sirf transform -> layout nahi hilta) */
 .aurora-blob {
   position: absolute;

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { siteApi, clinicApi, pagesApi } from '../api/endpoints'
-import { seedSite, seedClinic, seedPages, DEFAULT_THEME } from '../data/seed'
+import { siteApi, clinicApi, pagesApi, accreditationsApi, trustBadgesApi, pricingApi, insurersApi, locationsApi } from '../api/endpoints'
+import { seedSite, seedClinic, seedPages, seedAccreditations, seedTrustBadges, seedPricing, seedInsurers, seedLocations, DEFAULT_THEME } from '../data/seed'
 
 // Theme Settings ke colour -> CSS variables (index.css ki saari classes inhi se bani hain)
 const THEME_VARS = {
@@ -40,11 +40,21 @@ export function SiteProvider({ children }) {
   const [site, setSite] = useState(seedSite)
   const [clinic, setClinic] = useState(seedClinic)
   const [pages, setPages] = useState(seedPages)
+  const [accreditations, setAccreditations] = useState(seedAccreditations)
+  const [trustBadges, setTrustBadges] = useState(seedTrustBadges)
+  const [pricing, setPricing] = useState(seedPricing)
+  const [insurers, setInsurers] = useState(seedInsurers)
+  const [locations, setLocations] = useState(seedLocations)
 
   const refresh = useCallback(() => {
     siteApi.get().then(setSite).catch(() => {})
     clinicApi.get().then(setClinic).catch(() => {})
     pagesApi.get().then(setPages).catch(() => {})
+    accreditationsApi.list().then(setAccreditations).catch(() => {})
+    trustBadgesApi.list().then(setTrustBadges).catch(() => {})
+    pricingApi.list().then(setPricing).catch(() => {})
+    insurersApi.list().then(setInsurers).catch(() => {})
+    locationsApi.list().then(setLocations).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -58,7 +68,28 @@ export function SiteProvider({ children }) {
   const settings = { ...site, ...clinic }
 
   return (
-    <SiteContext.Provider value={{ settings, site, clinic, pages, setSite, setClinic, setPages, refresh }}>
+    <SiteContext.Provider
+      value={{
+        settings,
+        site,
+        clinic,
+        pages,
+        accreditations,
+        trustBadges,
+        pricing,
+        insurers,
+        locations,
+        setSite,
+        setClinic,
+        setPages,
+        setAccreditations,
+        setTrustBadges,
+        setPricing,
+        setInsurers,
+        setLocations,
+        refresh,
+      }}
+    >
       {children}
     </SiteContext.Provider>
   )

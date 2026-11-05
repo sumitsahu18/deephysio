@@ -31,6 +31,8 @@ export const siteSchema = z
     logoUrl: imageUrl,
     facebookUrl: httpsUrlOrEmpty,
     instagramUrl: httpsUrlOrEmpty,
+    youtubeUrl: httpsUrlOrEmpty,
+    twitterUrl: httpsUrlOrEmpty,
     whatsapp: z.string().trim().max(20).regex(/^\d*$/, 'WhatsApp: digits only, with country code'),
     theme: z
       .object({ primary: hex, secondary: hex, accent: hex, background: hex, button: hex, buttonText: hex, text: hex })
@@ -87,12 +89,13 @@ export const serviceSchema = z.object({
     .toLowerCase()
     .max(80)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Page URL: lowercase letters, numbers and dashes only'),
-  summary: text(300),
-  body: text(8000),
-  helpsWith: z.array(text(200)).max(30),
-  image: imageUrl,
-  icon: z.enum(SERVICE_ICONS),
-  order,
+  summary: text(300).default(''),
+  body: text(8000).default(''),
+  provider: text(200).default(''),
+  helpsWith: z.array(text(200)).max(30).default([]),
+  image: imageUrl.default(''),
+  icon: z.enum(SERVICE_ICONS).default('HeartPulse'),
+  order: order.default(10),
 })
 
 export const teamSchema = z.object({
@@ -117,20 +120,84 @@ export const testimonialSchema = z.object({
   order,
 })
 
+export const accreditationSchema = z.object({
+  name: reqText(80, 'Organisation acronym / short name'),
+  fullName: text(200).default(''),
+  logoUrl: imageUrl.default(''),
+  description: text(500).default(''),
+  active: z.boolean().default(true),
+  order: order.default(10),
+})
+
+export const trustBadgeSchema = z.object({
+  message: reqText(200, 'Trust message'),
+  icon: text(60).default('Clock'),
+  active: z.boolean().default(true),
+  order: order.default(10),
+})
+
+export const pricingSchema = z.object({
+  name: reqText(120, 'Plan / Service name'),
+  duration: reqText(60, 'Duration'),
+  price: z.coerce.number().min(0, 'Price must be 0 or more').max(99999),
+  category: z.enum(['clinic', 'home_visit']).default('clinic'),
+  notes: text(500).default(''),
+  active: z.boolean().default(true),
+  order: order.default(10),
+})
+
+export const insurerSchema = z.object({
+  name: reqText(120, 'Insurance provider name'),
+  logoUrl: imageUrl.default(''),
+  notes: text(500).default(''),
+  active: z.boolean().default(true),
+  order: order.default(10),
+})
+
+export const locationSchema = z.object({
+  name: reqText(120, 'Location name'),
+  address: reqText(300, 'Address'),
+  postcode: text(30).default(''),
+  phone: text(40).default(''),
+  email: z.union([z.literal(''), z.string().trim().email('Enter a valid email').max(160)]).default(''),
+  hours: text(500).default(''),
+  mapUrl: z
+    .string()
+    .trim()
+    .max(2000)
+    .refine((v) => v === '' || /^https:\/\/(www\.)?google\.[a-z.]+\/maps/.test(v), 'Must be a Google Maps link (https://www.google.com/maps...)')
+    .default(''),
+  directionsUrl: httpsUrlOrEmpty.default(''),
+  active: z.boolean().default(true),
+  order: order.default(10),
+})
+
+
 // ---------- Enquiry (public form) ----------
 const phoneRe = /^[+\d][\d\s()-]{7,19}$/
-export const enquirySchema = z
-  .object({
-    name: z.string().trim().min(2, 'Please enter your name.').max(100),
-    email: z.union([z.literal(''), z.string().trim().email('Please enter a valid email address.').max(160)]).default(''),
-    phone: z.union([z.literal(''), z.string().trim().regex(phoneRe, 'Please enter a valid phone number.')]).default(''),
-    preferredTime: z.enum(['Any time', 'Morning', 'Afternoon', 'Evening']).default('Any time'),
-    message: z.string().trim().min(5, 'Please add a short message.').max(2000, 'Please keep your message under 2000 characters.'),
-    website: z.string().max(0).optional(), // honeypot - insaan isse khali chhodta hai
-  })
-  .refine((d) => d.email || d.phone, { message: 'Please give us an email address or a phone number.', path: ['email'] })
+export const REASONS = [
+  'Sports Injury',
+  'Back/Neck Pain',
+  'Post-Op',
+  'Acupuncture',
+  'Home Visit',
+  'Other',
+]
 
-export const enquiryStatusSchema = z.object({ status: z.enum(['new', 'contacted', 'booked', 'closed']) })
+export const enquirySchema = z.object({
+  name: z.string().trim().min(2, 'Please enter your full name.').max(100),
+  email: z.string().trim().email('Please enter a valid email address.').max(160),
+  phone: z.string().trim().regex(phoneRe, 'Please enter a valid phone number (at least 7 digits).'),
+  preferredDate: z.string().trim().min(1, 'Please select your preferred appointment date.').max(50),
+  preferredTime: z.string().trim().min(1, 'Please select your preferred appointment time.').max(60),
+  reason: z.enum(REASONS, { errorMap: () => ({ message: 'Please select a reason for your appointment.' }) }),
+  message: z.string().trim().max(2000, 'Please keep your message under 2000 characters.').default(''),
+  website: z.string().max(0).optional(), // honeypot - insaan isse khali chhodta hai
+})
+
+export const enquiryStatusSchema = z.object({
+  status: z.enum(['new', 'contacted', 'scheduled', 'booked', 'closed']),
+})
 
 // ---------- Users & auth ----------
 export const password = z

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, House, Users, Stethoscope, Inbox, Images, Palette, Settings, LogOut, Menu, X, Eye } from 'lucide-react'
+import { LayoutDashboard, House, ShieldCheck, Users, Stethoscope, Receipt, MapPin, Inbox, Images, Palette, Settings, LogOut, Menu, X, Eye } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { USE_MOCK } from '../api/endpoints'
 import GlassBackground from '../components/GlassBackground'
@@ -10,8 +10,11 @@ import Logo from '../components/Logo'
 export const ADMIN_NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, perm: 'dashboard', end: true },
   { to: '/admin/homepage', label: 'Homepage & Pages', icon: House, perm: 'homepage' },
+  { to: '/admin/trust', label: 'Trust & Accreditations', icon: ShieldCheck, perm: 'homepage' },
   { to: '/admin/about', label: 'About & Team', icon: Users, perm: 'about' },
   { to: '/admin/services', label: 'Services', icon: Stethoscope, perm: 'services' },
+  { to: '/admin/pricing', label: 'Pricing & Fees', icon: Receipt, perm: 'services' },
+  { to: '/admin/locations', label: 'Clinic Locations', icon: MapPin, perm: 'contact' },
   { to: '/admin/contact', label: 'Contact & Enquiries', icon: Inbox, perm: 'contact' },
   { to: '/admin/media', label: 'Media / Images', icon: Images, perm: 'media' },
   { to: '/admin/theme', label: 'Theme Settings', icon: Palette, perm: 'theme' },

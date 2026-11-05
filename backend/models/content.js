@@ -13,6 +13,7 @@ export const Service = make('Service', {
   slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
   summary: { type: String, default: '' },
   body: { type: String, default: '' },
+  provider: { type: String, default: '' },
   helpsWith: { type: [String], default: [] },
   image: { type: String, default: '' },
   icon: { type: String, default: 'HeartPulse' },
@@ -57,11 +58,61 @@ export const Media = make('Media', {
 
 // PDF 2.4 Data Minimisation: sirf ye fields. Koi medical / diagnosis field nahi.
 export const Enquiry = make('Enquiry', {
-  name: { type: String, required: true },
-  email: { type: String, default: '' },
-  phone: { type: String, default: '' },
-  preferredTime: { type: String, default: 'Any time' },
-  message: { type: String, required: true },
-  status: { type: String, enum: ['new', 'contacted', 'booked', 'closed'], default: 'new' },
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, trim: true },
+  phone: { type: String, required: true, trim: true },
+  preferredDate: { type: String, default: '', trim: true },
+  preferredTime: { type: String, default: 'Flexible / Any time', trim: true },
+  reason: { type: String, default: 'Other', trim: true },
+  message: { type: String, default: '', trim: true },
+  status: { type: String, enum: ['new', 'contacted', 'scheduled', 'booked', 'closed'], default: 'new' },
   emailed: { type: Boolean, default: false },
 })
+
+export const Accreditation = make('Accreditation', {
+  name: { type: String, required: true, trim: true },
+  fullName: { type: String, default: '', trim: true },
+  logoUrl: { type: String, default: '' },
+  description: { type: String, default: '' },
+  active: { type: Boolean, default: true },
+  order: { type: Number, default: 10 },
+})
+
+export const TrustBadge = make('TrustBadge', {
+  message: { type: String, required: true, trim: true },
+  icon: { type: String, default: 'Clock' },
+  active: { type: Boolean, default: true },
+  order: { type: Number, default: 10 },
+})
+
+export const Pricing = make('Pricing', {
+  name: { type: String, required: true, trim: true },
+  duration: { type: String, required: true, trim: true },
+  price: { type: Number, required: true, min: 0 },
+  category: { type: String, enum: ['clinic', 'home_visit'], default: 'clinic' },
+  notes: { type: String, default: '', trim: true },
+  active: { type: Boolean, default: true },
+  order: { type: Number, default: 10 },
+})
+
+export const Insurer = make('Insurer', {
+  name: { type: String, required: true, trim: true },
+  logoUrl: { type: String, default: '' },
+  notes: { type: String, default: '', trim: true },
+  active: { type: Boolean, default: true },
+  order: { type: Number, default: 10 },
+})
+
+export const Location = make('Location', {
+  name: { type: String, required: true, trim: true },
+  address: { type: String, required: true, trim: true },
+  postcode: { type: String, default: '', trim: true },
+  phone: { type: String, default: '', trim: true },
+  email: { type: String, default: '', trim: true },
+  hours: { type: String, default: '', trim: true },
+  mapUrl: { type: String, default: '', trim: true },
+  directionsUrl: { type: String, default: '', trim: true },
+  active: { type: Boolean, default: true },
+  order: { type: Number, default: 10 },
+})
+

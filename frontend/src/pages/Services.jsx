@@ -5,6 +5,8 @@ import { useSite } from '../context/SiteContext'
 import useFetch from '../hooks/useFetch'
 import PageHeader from '../components/PageHeader'
 import ServiceCard from '../components/ServiceCard'
+import PricingSection from '../components/PricingSection'
+import PolicySection from '../components/PolicySection'
 import Spinner from '../components/Spinner'
 import Reveal from '../components/Reveal'
 
@@ -29,6 +31,10 @@ export default function Services() {
             <ServiceCard key={s._id} service={s} variant="photo" tone={TONES[i % TONES.length]} delay={(i % 3) * 100} />
           ))}
         </div>
+
+        <PricingSection />
+        <PolicySection />
+
         {p.disclaimer && (
           <Reveal anim="fade">
             <p className="glass-soft mx-auto mt-10 max-w-3xl rounded-2xl p-5 text-center text-sm leading-relaxed text-white/70">{p.disclaimer}</p>

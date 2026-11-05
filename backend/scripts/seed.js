@@ -9,8 +9,21 @@ import { connectDb } from '../db.js'
 import { password as passwordRule } from '../lib/schemas.js'
 import User from '../models/User.js'
 import Setting from '../models/Setting.js'
-import { Service, TeamMember, Faq, Testimonial } from '../models/content.js'
-import { seedSite, seedClinic, seedPages, seedServices, seedTeam, seedFaqs, seedTestimonials } from '../data/seed.js'
+import { Service, TeamMember, Faq, Testimonial, Accreditation, TrustBadge, Pricing, Insurer, Location } from '../models/content.js'
+import {
+  seedSite,
+  seedClinic,
+  seedPages,
+  seedServices,
+  seedTeam,
+  seedFaqs,
+  seedTestimonials,
+  seedAccreditations,
+  seedTrustBadges,
+  seedPricing,
+  seedInsurers,
+  seedLocations,
+} from '../data/seed.js'
 
 const reset = process.argv.includes('--reset')
 const strip = (list) => list.map(({ _id, ...rest }) => rest)
@@ -28,6 +41,11 @@ for (const [Model, list, name] of [
   [TeamMember, seedTeam, 'team'],
   [Faq, seedFaqs, 'faqs'],
   [Testimonial, seedTestimonials, 'testimonials'],
+  [Accreditation, seedAccreditations, 'accreditations'],
+  [TrustBadge, seedTrustBadges, 'trust-badges'],
+  [Pricing, seedPricing, 'pricing'],
+  [Insurer, seedInsurers, 'insurers'],
+  [Location, seedLocations, 'locations'],
 ]) {
   if (reset) await Model.deleteMany({})
   if (!(await Model.estimatedDocumentCount())) {

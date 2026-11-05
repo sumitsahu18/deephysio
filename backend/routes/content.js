@@ -1,8 +1,22 @@
 import { Router } from 'express'
 import mongoose from 'mongoose'
 import Setting from '../models/Setting.js'
-import { Service, TeamMember, Faq, Testimonial } from '../models/content.js'
-import { siteSchema, clinicSchema, pagesSchema, checkPageImages, serviceSchema, teamSchema, faqSchema, testimonialSchema } from '../lib/schemas.js'
+import { Service, TeamMember, Faq, Testimonial, Accreditation, TrustBadge, Pricing, Insurer, Location } from '../models/content.js'
+import {
+  siteSchema,
+  clinicSchema,
+  pagesSchema,
+  checkPageImages,
+  serviceSchema,
+  teamSchema,
+  faqSchema,
+  testimonialSchema,
+  accreditationSchema,
+  trustBadgeSchema,
+  pricingSchema,
+  insurerSchema,
+  locationSchema,
+} from '../lib/schemas.js'
 import { requireAuth, requirePerm } from '../middleware/auth.js'
 import { hasPermission, PAGE_PERMISSION } from '../lib/permissions.js'
 import { asyncH, HttpError } from '../middleware/errors.js'
@@ -122,5 +136,10 @@ collection('services', Service, serviceSchema, 'services', { bySlug: true })
 collection('team', TeamMember, teamSchema, 'about')
 collection('faqs', Faq, faqSchema, 'homepage')
 collection('testimonials', Testimonial, testimonialSchema, 'homepage')
+collection('accreditations', Accreditation, accreditationSchema, 'homepage')
+collection('trust-badges', TrustBadge, trustBadgeSchema, 'homepage')
+collection('pricing', Pricing, pricingSchema, 'services')
+collection('insurers', Insurer, insurerSchema, 'services')
+collection('locations', Location, locationSchema, 'contact')
 
 export default r
