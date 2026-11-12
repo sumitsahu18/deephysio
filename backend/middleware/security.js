@@ -33,7 +33,18 @@ export function csrfGuard(req, _res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next()
   if (req.get('X-Requested-With') !== 'deephysio') return next(new HttpError(403, 'Request blocked.'))
   const origin = req.get('Origin')
-  if (origin && !config.origins.includes(origin)) return next(new HttpError(403, 'Request blocked.'))
+  if (origin) {
+    const isAllowed =
+      config.origins.includes(origin) ||
+      (() => {
+        try {
+          return new URL(origin).hostname.endsWith('.netlify.app')
+        } catch {
+          return false
+        }
+      })()
+    if (!isAllowed) return next(new HttpError(403, 'Request blocked.'))
+  }
   next()
 }
 
