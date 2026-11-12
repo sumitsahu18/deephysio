@@ -13,6 +13,17 @@ const THEME_VARS = {
   text: '--color-text',
 }
 
+const CACHE_SITE_KEY = 'dp_site_cache_v1'
+const CACHE_CLINIC_KEY = 'dp_clinic_cache_v1'
+
+function getCached(key, fallback) {
+  try {
+    const raw = typeof window !== 'undefined' ? localStorage.getItem(key) : null
+    if (raw) return { ...fallback, ...JSON.parse(raw) }
+  } catch {}
+  return fallback
+}
+
 // Purana dark theme (jo pehle default tha) database / browser mein save ho to naya light theme lagao.
 // Admin ne khud jo custom rang chune hain wo waise hi rehte hain.
 const OLD_DARK_DEFAULT = { background: '#072e37', text: '#ffffff' }
@@ -31,14 +42,29 @@ export function applyTheme(theme, el = document.documentElement) {
   })
 }
 
+// Initial theme apply from cache (instant, no flash)
+if (typeof document !== 'undefined') {
+  try {
+    const initial = getCached(CACHE_SITE_KEY, seedSite)
+    if (initial?.theme) applyTheme(initial.theme)
+  } catch {}
+}
+
 // Poori public site ka content API se aata hai - koi text component mein hardcode nahi.
 //   settings = site (admin) + clinic (reception) details, ek object mein
 //   pages    = har page ka headline / paragraph / image
 const SiteContext = createContext(null)
 
 export function SiteProvider({ children }) {
-  const [site, setSite] = useState(seedSite)
-  const [clinic, setClinic] = useState(seedClinic)
+  const [site, setSiteState] = useState(() => getCached(CACHE_SITE_KEY, seedSite))
+  const [clinic, setClinicState] = useState(() => getCached(CACHE_CLINIC_KEY, seedClinic))
+  const [loaded, setLoaded] = useState(() => {
+    try {
+      return typeof window !== 'undefined' && !!localStorage.getItem(CACHE_SITE_KEY)
+    } catch {
+      return false
+    }
+  })
   const [pages, setPages] = useState(seedPages)
   const [accreditations, setAccreditations] = useState(seedAccreditations)
   const [trustBadges, setTrustBadges] = useState(seedTrustBadges)
@@ -46,16 +72,45 @@ export function SiteProvider({ children }) {
   const [insurers, setInsurers] = useState(seedInsurers)
   const [locations, setLocations] = useState(seedLocations)
 
+  const setSite = useCallback((value) => {
+    setSiteState((prev) => {
+      const next = typeof value === 'function' ? value(prev) : value
+      try {
+        localStorage.setItem(CACHE_SITE_KEY, JSON.stringify(next))
+      } catch {}
+      return next
+    })
+  }, [])
+
+  const setClinic = useCallback((value) => {
+    setClinicState((prev) => {
+      const next = typeof value === 'function' ? value(prev) : value
+      try {
+        localStorage.setItem(CACHE_CLINIC_KEY, JSON.stringify(next))
+      } catch {}
+      return next
+    })
+  }, [])
+
   const refresh = useCallback(() => {
-    siteApi.get().then(setSite).catch(() => {})
-    clinicApi.get().then(setClinic).catch(() => {})
+    siteApi
+      .get()
+      .then((data) => {
+        setSite(data)
+        setLoaded(true)
+      })
+      .catch(() => setLoaded(true))
+    clinicApi
+      .get()
+      .then(setClinic)
+      .catch(() => {})
     pagesApi.get().then(setPages).catch(() => {})
     accreditationsApi.list().then(setAccreditations).catch(() => {})
     trustBadgesApi.list().then(setTrustBadges).catch(() => {})
     pricingApi.list().then(setPricing).catch(() => {})
     insurersApi.list().then(setInsurers).catch(() => {})
     locationsApi.list().then(setLocations).catch(() => {})
-  }, [])
+  }, [setSite, setClinic])
 
   useEffect(() => {
     refresh()
@@ -73,6 +128,7 @@ export function SiteProvider({ children }) {
         settings,
         site,
         clinic,
+        loaded,
         pages,
         accreditations,
         trustBadges,

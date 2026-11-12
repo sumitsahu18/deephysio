@@ -24,6 +24,7 @@ export default function Logo({ light = false, to = '/', small = false }) {
   const site = useSite()
   const logoUrl = site?.settings?.logoUrl
   const name = site?.settings?.clinicName || 'DeePhysio'
+  const isLoaded = site?.loaded
 
   if (logoUrl)
     return (
@@ -35,6 +36,15 @@ export default function Logo({ light = false, to = '/', small = false }) {
         />
       </Link>
     )
+
+  // Settings load ho rahi hain aur abhi logoUrl nahi mila: default Mark flash mat karo
+  if (!isLoaded) {
+    return (
+      <Link to={to} className="flex min-w-0 items-center opacity-0 pointer-events-none" aria-label={`${name} home`}>
+        <div className={small ? 'h-9 w-[120px]' : 'h-12 w-[160px]'} />
+      </Link>
+    )
+  }
 
   return (
     <Link to={to} className="flex min-w-0 items-center gap-2" aria-label={`${name} home`}>
